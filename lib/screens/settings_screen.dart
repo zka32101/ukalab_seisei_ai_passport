@@ -2,6 +2,7 @@ import 'package:app_common_kit/app_common_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ukalab_core/daily_goal.dart' show DailyGoalSetting;
 import 'package:ukalab_core/ui.dart' show DataManagementSection;
 import 'package:ukalab_core/ukalab_core.dart' show Question, historyCsv;
 
@@ -55,6 +56,8 @@ class SettingsScreen extends ConsumerWidget {
           subtitle: const Text('日ごと・分野ごとの解答数と正答率。個人情報は含みません。'),
           onTap: () => _copyHistory(context, ref),
         ),
+        const Divider(height: 32),
+        const DailyGoalSetting(),
         const Divider(height: 32),
         DataManagementSection(
           parts: seiseiDataParts,
