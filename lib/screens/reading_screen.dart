@@ -1,6 +1,8 @@
 import 'package:app_common_kit/app_common_kit.dart';
+import 'package:app_common_kit/hands_free_tts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ukalab_core/ukalab_core.dart';
 
 import '../data/exam_repository.dart';
 import '../data/reading_repository.dart';
@@ -10,6 +12,12 @@ import 'learn_screen.dart';
 /// 章ごとの解説読み物（教科書的なまとめページ）の一覧。
 class ReadingScreen extends ConsumerWidget {
   const ReadingScreen({super.key});
+
+  bool _isPremium(WidgetRef ref) => canUsePremiumFeature(
+        PremiumFeature.readingReadAloud,
+        isPremium: (ref.read(entitlementStateProvider).valueOrNull ?? EntitlementState.free)
+            .hasPremium,
+      );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,9 +40,13 @@ class ReadingScreen extends ConsumerWidget {
             return const EmptyState(message: '解説読み物のデータがまだありません。');
           }
 
+          final termsList = terms.valueOrNull ?? const [];
           final termsById = {
-            for (final t in terms.valueOrNull ?? const []) t.termId: t,
+            for (final t in termsList) t.termId: t,
           };
+          final termReferences = [
+            for (final t in termsList) TermReference(termId: t.termId, matchText: t.term),
+          ];
           final questions = examData.valueOrNull?.activeQuestions ?? const [];
           final questionsById = {for (final q in questions) q.qid: q};
 
@@ -72,6 +84,14 @@ class ReadingScreen extends ConsumerWidget {
                                   label: questionsById[id]!.prompt,
                                 ),
                           ],
+                          bodyTermReferences: termReferences,
+                          onReadAloud: !_isPremium(ref)
+                              ? null
+                              : () {
+                                  final text =
+                                      r.sections.map((s) => '${s.heading}。${s.body}').join('');
+                                  ref.read(handsFreeSpeakerProvider).speakNow(text);
+                                },
                           onRelatedTermTap: (termId) {
                             final term = termsById[termId];
                             if (term == null) return;
