@@ -42,7 +42,7 @@ void main() {
       await ref.read(srsProvider.notifier).recordAnswer(qid: 'q1', correct: true);
       expect(ref.read(srsProvider).requireValue.items.keys, ['q1']);
 
-      final text = encodeLearningDataBackup(ref, seiseiDataParts);
+      final text = await encodeLearningDataBackupAsync(ref, seiseiDataParts);
 
       await resetLearningData(ref, seiseiDataParts);
       expect(ref.read(srsProvider).requireValue.items, isEmpty);
