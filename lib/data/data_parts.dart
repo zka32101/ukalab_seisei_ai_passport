@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ukalab_core/achievements.dart' show achievementUnlockDataPart;
 import 'package:ukalab_core/daily_goal.dart';
+import 'package:ukalab_core/glossary.dart' show LearnedTermsStore, learnedTermsDataPart;
 import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_core/ukalab_core.dart';
 
@@ -13,6 +14,7 @@ import 'srs_repository.dart';
 /// ユーザー設定・curationとして扱い、含めない。
 final List<DataPart> seiseiDataParts = [
   achievementUnlockDataPart,
+  learnedTermsDataPart(LearnedTermsStore('seisei_ai_passport')),
   DataPart(
     id: 'history',
     export: (ref) => encodeHistory(ref.read(historyProvider)),

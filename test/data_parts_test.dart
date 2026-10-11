@@ -12,7 +12,7 @@ void main() {
   test('パーツのidは重複しない', () {
     final ids = [for (final p in seiseiDataParts) p.id];
     expect(ids.toSet().length, ids.length);
-    expect(ids, ['achievementUnlock', 'history', 'srs', 'dailyGoal', 'dailyGoalHistory', 'questionMemo']);
+    expect(ids, ['achievementUnlock', 'learnedTerms', 'history', 'srs', 'dailyGoal', 'dailyGoalHistory', 'questionMemo']);
   });
 
   testWidgets('間隔反復の記録を書き出し→リセット→読み込みで戻せる', (tester) async {
@@ -42,7 +42,7 @@ void main() {
       await ref.read(srsProvider.notifier).recordAnswer(qid: 'q1', correct: true);
       expect(ref.read(srsProvider).requireValue.items.keys, ['q1']);
 
-      final text = encodeLearningDataBackup(ref, seiseiDataParts);
+      final text = await encodeLearningDataBackupAsync(ref, seiseiDataParts);
 
       await resetLearningData(ref, seiseiDataParts);
       expect(ref.read(srsProvider).requireValue.items, isEmpty);
