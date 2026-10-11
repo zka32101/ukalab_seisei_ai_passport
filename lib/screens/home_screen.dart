@@ -13,6 +13,7 @@ import 'premium_practice_cards.dart';
 import 'route_planner_screen.dart';
 import 'teach_mascot_screen.dart';
 import 'glossary_screen.dart';
+import 'reading_screen.dart';
 import 'term_map_screen.dart';
 
 class _ExperienceEntry {
@@ -53,6 +54,12 @@ final _experienceEntries = [
     title: '用語集',
     subtitle: '用語を検索して、覚えた用語にチェックを付けよう',
     builder: (_) => const GlossaryScreen(),
+  ),
+  _ExperienceEntry(
+    icon: Icons.auto_stories_outlined,
+    title: '章ごとの解説読み物',
+    subtitle: '公式の章立てに沿って、学習項目を体系的に読める',
+    builder: (_) => const ReadingScreen(),
   ),
   _ExperienceEntry(
     icon: Icons.hub_outlined,

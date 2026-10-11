@@ -39,6 +39,7 @@
   - 「温度の実験室」（予測→実行、型②）: `PredictRunScenario`（`predict_run_scenarios.jsonl`、9場面、bayes/expectedValue/normalDistributionの3種）・`PredictRunWidget`
   - 「今日やる3つ」（最短ルートプランナー、型④）: データファイルを持たないロジック専用の型。記録タブと共用の`SrsStore.statsBySubject`から科目別正答率を算出し、`RoutePlanner.plan()`で弱点・配点から3科目を提案する`RoutePlannerWidget`
 - ホームタブに「今月のAI動向」（画期的な機能⑥、`yourwish_kentei`の`AiNewsItem`）を実装。`app_common_kit`に既製UIウィジェットが無いため`lib/screens/ai_news_screen.dart`でカード一覧を自作。`lib/data/ai_news_repository.dart`で`news.jsonl`（3件）を新しい順に読み込み、「試験に出そう」バッジ・章タグ・要約を表示。`url_launcher`を追加し「一次情報を見る」で出典URLを外部ブラウザで開き、`relatedQuestionId`がある場合は「関連問題を解く」から学ぶタブ相当の画面に遷移する
+- ホームタブに「章ごとの解説読み物」（教科書的なまとめページ）を実装。`ukalab_core`の`ChapterReading`モデル・`app_common_kit`の`ChapterReadingWidget`として共通基盤化し、G検定アプリと共用する。`content/exam/reading.jsonl`（5章分）を`lib/data/reading_repository.dart`で読み込み、`lib/screens/reading_screen.dart`で節（見出し＋本文）ごとに表示、末尾から関連用語・関連問題にも遷移できる
 - GUGA公式サイトで2027年試験向けシラバスの「大幅改訂」が告知された（公式テキストの発行元もGUGAから翔泳社に変更）。出題範囲の詳細が未確認のため問題データの作り直しは時期尚早だが、新旧の問題を区別できるよう`questions.jsonl`・`seisei_ai_passport.json`に`syllabusVersion`フィールドを追加済み。`yourwish_kentei`側の型実装提案は`content/exam/proposal/`に作成済み（詳細は`content/exam/README.md`）
 - `yourwish_kentei`側への型実装提案2件をIssue起票済み: [Issue #27](https://github.com/zka32101/yourwish_kentei/issues/27)（`AiTimelineEvent`型）・[Issue #28](https://github.com/zka32101/yourwish_kentei/issues/28)（`Question`/`ExamConfig`への`syllabusVersion`追加）。RAGパイプライン構築パズル等3章向け新規提案3件はまだ未起票
 
