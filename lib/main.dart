@@ -1,5 +1,6 @@
 import 'package:app_common_kit/app_common_kit.dart' hide SettingsScreen;
 import 'package:ukalab_core/daily_goal.dart' show dailyGoalOverrides;
+import 'package:ukalab_core/reminder.dart' show reminderOverrides;
 import 'package:ukalab_core/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,10 +41,12 @@ Future<void> main() async {
 
   final studyNotes = await studyNotesOverrides('seisei_ai_passport');
   final dailyGoal = await dailyGoalOverrides('seisei_ai_passport');
+  final reminder = await reminderOverrides('seisei_ai_passport');
   final container = ProviderContainer(
     overrides: [
       ...studyNotes,
       ...dailyGoal,
+      ...reminder,
       entitlementServiceProvider.overrideWithValue(entitlementService),
       handsFreeStoreProvider.overrideWithValue(SharedPreferencesHandsFreeStore('seisei_ai_passport')),
       examDateStoreProvider.overrideWithValue(ExamDateStore('seisei_ai_passport')),
