@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ukalab_core/daily_goal.dart';
 import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_core/ukalab_core.dart';
 
@@ -35,6 +36,21 @@ final List<DataPart> seiseiDataParts = [
           ));
     },
     reset: (ref) => ref.read(srsProvider.notifier).reset(),
+  ),
+  DataPart(
+    id: 'dailyGoal',
+    export: (ref) => ref.read(dailyGoalProvider).toJson(),
+    restore: (ref, json) =>
+        ref.read(dailyGoalProvider.notifier).restore(DailyGoal.fromJson(json as Map<String, dynamic>)),
+    reset: (ref) => ref.read(dailyGoalProvider.notifier).reset(),
+  ),
+  DataPart(
+    id: 'dailyGoalHistory',
+    export: (ref) => [for (final e in ref.read(dailyGoalHistoryProvider)) e.toJson()],
+    restore: (ref, json) => ref.read(dailyGoalHistoryProvider.notifier).restore([
+      for (final j in (json as List).cast<Map<String, dynamic>>()) DailyGoalHistoryEntry.fromJson(j),
+    ]),
+    reset: (ref) => ref.read(dailyGoalHistoryProvider.notifier).reset(),
   ),
   DataPart(
     id: 'questionMemo',

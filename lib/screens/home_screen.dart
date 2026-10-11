@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ukalab_core/daily_goal.dart' show DailyMissionCard;
 import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_core/ukalab_core.dart';
 
@@ -125,6 +126,8 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: 8),
+          const DailyMissionCard(),
           const SizedBox(height: 8),
           PremiumPracticeCards(exam: exam, questions: questions),
           const SizedBox(height: 8),
