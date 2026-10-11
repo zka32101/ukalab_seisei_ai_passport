@@ -1,0 +1,34 @@
+name: Create Tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name (e.g. v0.10.0)'
+        required: true
+      target_sha:
+        description: 'Commit SHA to tag'
+        required: true
+      message:
+        description: 'Tag annotation message'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Create and push tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          MSG="${{ inputs.message }}"
+          if [ -z "$MSG" ]; then MSG="${{ inputs.tag_name }}"; fi
+          git tag -a "${{ inputs.tag_name }}" "${{ inputs.target_sha }}" -m "$MSG"
+          git push origin "${{ inputs.tag_name }}"
