@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ukalab_core/achievements.dart' show achievementUnlockDataPart;
 import 'package:ukalab_core/daily_goal.dart';
 import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_core/ukalab_core.dart';
@@ -11,6 +12,7 @@ import 'srs_repository.dart';
 /// 解答履歴・間隔反復の記録・自分用メモが対象。試験日・ブックマークは
 /// ユーザー設定・curationとして扱い、含めない。
 final List<DataPart> seiseiDataParts = [
+  achievementUnlockDataPart,
   DataPart(
     id: 'history',
     export: (ref) => encodeHistory(ref.read(historyProvider)),

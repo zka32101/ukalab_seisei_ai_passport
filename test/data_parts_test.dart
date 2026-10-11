@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ukalab_core/achievements.dart';
 import 'package:ukalab_core/daily_goal.dart';
 import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_seisei_ai_passport/data/data_parts.dart';
@@ -11,7 +12,7 @@ void main() {
   test('パーツのidは重複しない', () {
     final ids = [for (final p in seiseiDataParts) p.id];
     expect(ids.toSet().length, ids.length);
-    expect(ids, ['history', 'srs', 'dailyGoal', 'dailyGoalHistory', 'questionMemo']);
+    expect(ids, ['achievementUnlock', 'history', 'srs', 'dailyGoal', 'dailyGoalHistory', 'questionMemo']);
   });
 
   testWidgets('間隔反復の記録を書き出し→リセット→読み込みで戻せる', (tester) async {
@@ -19,6 +20,8 @@ void main() {
     late WidgetRef ref;
     await tester.pumpWidget(ProviderScope(
       overrides: [
+        achievementUnlockServiceProvider
+            .overrideWithValue(AchievementUnlockService(store: AchievementUnlockStore('test'))),
         dailyGoalServiceProvider.overrideWithValue(DailyGoalService(store: DailyGoalStore('test'))),
         dailyGoalHistoryServiceProvider
             .overrideWithValue(DailyGoalHistoryService(store: DailyGoalHistoryStore('test'))),
