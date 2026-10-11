@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ukalab_core/daily_goal.dart' show dailyGoalOverrides;
+import 'package:ukalab_core/reminder.dart' show reminderOverrides;
 import 'package:ukalab_core/ui.dart' show studyNotesOverrides;
 
 import 'package:ukalab_seisei_ai_passport/main.dart';
@@ -39,6 +40,7 @@ void main() {
             handsFreeStoreProvider.overrideWithValue(InMemoryHandsFreeStore()),
             ...(await tester.runAsync(() => studyNotesOverrides('test')))!,
             ...(await tester.runAsync(() => dailyGoalOverrides('test')))!,
+            ...(await tester.runAsync(() => reminderOverrides('test')))!,
           ],
           child: const UkalabSeiseiAiPassportApp(),
         ),

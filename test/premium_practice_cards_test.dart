@@ -8,6 +8,7 @@ import 'package:ukalab_seisei_ai_passport/data/history_store.dart';
 import 'package:ukalab_seisei_ai_passport/screens/learn_screen.dart';
 import 'package:ukalab_seisei_ai_passport/screens/premium_practice_cards.dart';
 import 'package:ukalab_core/daily_goal.dart' show dailyGoalOverrides;
+import 'package:ukalab_core/reminder.dart' show reminderOverrides;
 import 'package:ukalab_core/ui.dart' show studyNotesOverrides;
 import 'package:ukalab_core/ukalab_core.dart';
 
@@ -47,6 +48,7 @@ Future<ProviderContainer> _pump(
     handsFreeStoreProvider.overrideWithValue(InMemoryHandsFreeStore()),
     ...(await tester.runAsync(() => studyNotesOverrides('test')))!,
             ...(await tester.runAsync(() => dailyGoalOverrides('test')))!,
+            ...(await tester.runAsync(() => reminderOverrides('test')))!,
     entitlementStateProvider.overrideWith(
       (ref) => Stream.value(EntitlementState(hasPremium: premium)),
     ),
