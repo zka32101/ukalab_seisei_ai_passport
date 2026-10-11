@@ -12,6 +12,7 @@ import 'predict_run_screen.dart';
 import 'premium_practice_cards.dart';
 import 'route_planner_screen.dart';
 import 'teach_mascot_screen.dart';
+import 'glossary_screen.dart';
 import 'term_map_screen.dart';
 
 class _ExperienceEntry {
@@ -46,6 +47,12 @@ final _experienceEntries = [
     title: '学習の失敗図鑑',
     subtitle: '学習曲線から症状を見抜き、正しい対策を選ぼう',
     builder: (_) => const FailureGalleryScreen(),
+  ),
+  _ExperienceEntry(
+    icon: Icons.menu_book_outlined,
+    title: '用語集',
+    subtitle: '用語を検索して、覚えた用語にチェックを付けよう',
+    builder: (_) => const GlossaryScreen(),
   ),
   _ExperienceEntry(
     icon: Icons.hub_outlined,
