@@ -2,6 +2,7 @@ import 'package:app_common_kit/app_common_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ukalab_core/achievements.dart' show AchievementsView, dailyGoalAchievementCategoryLabels;
 import 'package:ukalab_core/daily_goal.dart' show DailyGoalSetting;
 import 'package:ukalab_core/reminder.dart' show ReminderSettingsSection;
 import 'package:ukalab_core/ui.dart' show DataManagementSection;
@@ -66,6 +67,17 @@ class SettingsScreen extends ConsumerWidget {
           parts: seiseiDataParts,
           description: '解答履歴・間隔反復の記録・自分用メモは、試験日・ブックマークを除いて、'
               '書き出し・読み込み・リセットができます。',
+        ),
+        const Divider(height: 32),
+        ListTile(
+          leading: const Icon(Icons.emoji_events_outlined),
+          title: const Text('実績'),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (_) => const AchievementsView(categoryLabels: dailyGoalAchievementCategoryLabels),
+            ),
+          ),
         ),
         const Divider(height: 32),
         const ListTile(

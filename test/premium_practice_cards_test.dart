@@ -1,3 +1,4 @@
+import 'package:ukalab_core/achievements.dart' show achievementUnlockOverrides, dailyGoalAchievementsOverride;
 import 'package:app_common_kit/app_common_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,6 +50,8 @@ Future<ProviderContainer> _pump(
     ...(await tester.runAsync(() => studyNotesOverrides('test')))!,
             ...(await tester.runAsync(() => dailyGoalOverrides('test')))!,
             ...(await tester.runAsync(() => reminderOverrides('test')))!,
+            ...(await tester.runAsync(() => achievementUnlockOverrides('test')))!,
+            dailyGoalAchievementsOverride,
     entitlementStateProvider.overrideWith(
       (ref) => Stream.value(EntitlementState(hasPremium: premium)),
     ),

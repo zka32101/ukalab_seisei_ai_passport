@@ -1,4 +1,6 @@
 import 'package:app_common_kit/app_common_kit.dart' hide SettingsScreen;
+import 'package:ukalab_core/achievements.dart'
+    show achievementUnlockOverrides, dailyGoalAchievementsOverride, watchAchievementUnlocks;
 import 'package:ukalab_core/daily_goal.dart' show dailyGoalOverrides;
 import 'package:ukalab_core/reminder.dart' show reminderOverrides;
 import 'package:ukalab_core/ui.dart';
@@ -42,11 +44,14 @@ Future<void> main() async {
   final studyNotes = await studyNotesOverrides('seisei_ai_passport');
   final dailyGoal = await dailyGoalOverrides('seisei_ai_passport');
   final reminder = await reminderOverrides('seisei_ai_passport');
+  final achievementUnlock = await achievementUnlockOverrides('seisei_ai_passport');
   final container = ProviderContainer(
     overrides: [
       ...studyNotes,
       ...dailyGoal,
       ...reminder,
+      ...achievementUnlock,
+      dailyGoalAchievementsOverride,
       entitlementServiceProvider.overrideWithValue(entitlementService),
       handsFreeStoreProvider.overrideWithValue(SharedPreferencesHandsFreeStore('seisei_ai_passport')),
       examDateStoreProvider.overrideWithValue(ExamDateStore('seisei_ai_passport')),
@@ -63,12 +68,17 @@ Future<void> main() async {
   );
 }
 
-class UkalabSeiseiAiPassportApp extends StatelessWidget {
+/// 実績の解除通知のスナックバーを、どの画面にいても表示するためのキー。
+final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
+class UkalabSeiseiAiPassportApp extends ConsumerWidget {
   const UkalabSeiseiAiPassportApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    watchAchievementUnlocks(ref, scaffoldMessengerKey);
     return MaterialApp(
+      scaffoldMessengerKey: scaffoldMessengerKey,
       title: 'うかラボ 生成AIパスポート',
       debugShowCheckedModeBanner: false,
       theme: UkalabTheme.light(

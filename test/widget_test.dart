@@ -1,3 +1,4 @@
+import 'package:ukalab_core/achievements.dart' show achievementUnlockOverrides, dailyGoalAchievementsOverride;
 import 'package:app_common_kit/app_common_kit.dart' show FakeEntitlementService, InMemoryHandsFreeStore, entitlementServiceProvider, handsFreeStoreProvider;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,6 +42,8 @@ void main() {
             ...(await tester.runAsync(() => studyNotesOverrides('test')))!,
             ...(await tester.runAsync(() => dailyGoalOverrides('test')))!,
             ...(await tester.runAsync(() => reminderOverrides('test')))!,
+            ...(await tester.runAsync(() => achievementUnlockOverrides('test')))!,
+            dailyGoalAchievementsOverride,
           ],
           child: const UkalabSeiseiAiPassportApp(),
         ),
