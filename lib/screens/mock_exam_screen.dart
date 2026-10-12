@@ -4,10 +4,10 @@ import 'package:app_common_kit/app_common_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ukalab_core/mock_exam_history.dart';
+import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_core/ukalab_core.dart';
 
 import '../data/srs_repository.dart';
-import 'custom_mock_exam_screen.dart';
 
 /// 「模擬」タブ: 本試験相当の採点（合格ラインの目安は非公開のため70%を目安と明記）。
 /// 出題は、記録タブの解答実績から苦手な科目（正答率が低い科目）を優先的に多く含める。
