@@ -1,0 +1,32 @@
+name: Build release AAB
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.5'
+          channel: 'stable'
+      - name: リリース署名鍵を復元
+        run: |
+          echo "${{ secrets.UPLOAD_KEYSTORE_BASE64 }}" | base64 -d > /tmp/upload-keystore.jks
+          cat > android/key.properties <<EOF
+          storePassword=${{ secrets.UPLOAD_STORE_PASSWORD }}
+          keyPassword=${{ secrets.UPLOAD_KEY_PASSWORD }}
+          keyAlias=${{ secrets.UPLOAD_KEY_ALIAS }}
+          storeFile=/tmp/upload-keystore.jks
+          EOF
+      - run: flutter pub get
+      - run: flutter build appbundle --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-release-aab
+          path: build/app/outputs/bundle/release/app-release.aab
