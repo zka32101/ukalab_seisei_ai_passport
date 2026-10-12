@@ -3,9 +3,11 @@ import 'dart:math';
 import 'package:app_common_kit/app_common_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ukalab_core/mock_exam_history.dart';
 import 'package:ukalab_core/ukalab_core.dart';
 
 import '../data/srs_repository.dart';
+import 'custom_mock_exam_screen.dart';
 
 /// 「模擬」タブ: 本試験相当の採点（合格ラインの目安は非公開のため70%を目安と明記）。
 /// 出題は、記録タブの解答実績から苦手な科目（正答率が低い科目）を優先的に多く含める。
@@ -26,6 +28,12 @@ class _MockExamScreenState extends ConsumerState<MockExamScreen> {
   late List<Question> _picked;
   MockExamResult? _result;
 
+  bool _isPremium(WidgetRef ref) => canUsePremiumFeature(
+        PremiumFeature.mockExamHistory,
+        isPremium: (ref.read(entitlementStateProvider).valueOrNull ?? EntitlementState.free)
+            .hasPremium,
+      );
+
   void _start() {
     final level = widget.exam.levels.first;
     final count = level.questionCount.clamp(1, widget.questions.length);
@@ -39,18 +47,48 @@ class _MockExamScreenState extends ConsumerState<MockExamScreen> {
     });
   }
 
+  void _startCustom(List<String> subjectIds, int count) {
+    setState(() {
+      _picked = pickCustomMockExamQuestions(
+        pool: widget.questions,
+        subjectIds: subjectIds,
+        count: count,
+        seed: DateTime.now().millisecondsSinceEpoch,
+      )..shuffle();
+      _answers.clear();
+      _index = 0;
+      _started = true;
+      _result = null;
+    });
+  }
+
+  Future<void> _openCustomSetup() async {
+    final setup = await Navigator.of(context).push<CustomMockExamSetup>(
+      MaterialPageRoute(
+        builder: (_) => CustomMockExamSetupScreen(subjects: widget.exam.subjects),
+      ),
+    );
+    if (setup != null) _startCustom(setup.subjectIds, setup.count);
+  }
+
   void _select(int i) {
     setState(() => _answers[_picked[_index].qid] = i);
+  }
+
+  Future<void> _finish() async {
+    final rule = widget.exam.levels.first.passRule;
+    final result = scoreMockExam(questions: _picked, answers: _answers, rule: rule);
+    setState(() => _result = result);
+    if (_isPremium(ref)) {
+      await ref.read(mockExamHistoryProvider.notifier).record(result);
+    }
   }
 
   void _next() {
     if (_index + 1 < _picked.length) {
       setState(() => _index++);
     } else {
-      final rule = widget.exam.levels.first.passRule;
-      setState(() {
-        _result = scoreMockExam(questions: _picked, answers: _answers, rule: rule);
-      });
+      _finish();
     }
   }
 
@@ -78,6 +116,19 @@ class _MockExamScreenState extends ConsumerState<MockExamScreen> {
               ),
               const SizedBox(height: 24),
               FilledButton(onPressed: _start, child: const Text('模擬試験を始める')),
+              const SizedBox(height: 8),
+              OutlinedButton(
+                onPressed: () {
+                  if (!_isPremium(ref)) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('カスタム模擬試験はプレミアムの機能です。設定から購入できます。')),
+                    );
+                    return;
+                  }
+                  _openCustomSetup();
+                },
+                child: const Text('カスタム模擬試験'),
+              ),
             ],
           ),
         ),
@@ -86,14 +137,31 @@ class _MockExamScreenState extends ConsumerState<MockExamScreen> {
 
     final result = _result;
     if (result != null) {
+      final history = _isPremium(ref) ? ref.watch(mockExamHistoryProvider) : const <MockExamHistoryEntry>[];
       return Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
-          child: ResultSummary(
-            correct: result.total.score,
-            total: result.total.max,
-            passRatio: 0.70,
-            onRetry: _start,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ResultSummary(
+                correct: result.total.score,
+                total: result.total.max,
+                passRatio: 0.70,
+                onRetry: _start,
+              ),
+              if (history.length > 1) ...[
+                const SizedBox(height: 16),
+                Text('成長グラフ', style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 8),
+                MockExamTrendChart(
+                  points: [
+                    for (final h in history) MockExamTrendPoint(pct: h.pct, passed: h.passed),
+                  ],
+                  passPct: 70,
+                ),
+              ],
+            ],
           ),
         ),
       );
