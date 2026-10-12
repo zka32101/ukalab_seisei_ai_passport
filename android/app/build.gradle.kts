@@ -1,8 +1,21 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
+
+// リリース署名鍵。ローカルは android/key.properties（gitignore対象）、
+// CIは環境変数（GitHub Actions Secrets）から読む。どちらも無ければdebug鍵のまま。
+val keystorePropertiesFile = rootProject.file("key.properties")
+val keystoreProperties = Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+fun signingProp(key: String, env: String): String? =
+    keystoreProperties.getProperty(key) ?: System.getenv(env)
 
 android {
     namespace = "com.ukalab.ukalab_seisei_ai_passport"
@@ -29,11 +42,27 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        create("release") {
+            val storeFilePath = signingProp("storeFile", "UPLOAD_STORE_FILE")
+            if (storeFilePath != null) {
+                storeFile = file(storeFilePath)
+                storePassword = signingProp("storePassword", "UPLOAD_STORE_PASSWORD")
+                keyAlias = signingProp("keyAlias", "UPLOAD_KEY_ALIAS")
+                keyPassword = signingProp("keyPassword", "UPLOAD_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            // リリース署名鍵が設定されていればそれを使い、無ければdebug鍵のまま
+            // （`flutter run --release` がローカルで動くようにするため）。
+            signingConfig = if (signingProp("storeFile", "UPLOAD_STORE_FILE") != null) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
     }
 }

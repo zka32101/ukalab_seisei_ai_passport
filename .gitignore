@@ -1,3 +1,8 @@
+# リリース署名鍵（絶対にコミットしない）
+android/key.properties
+*.jks
+*.keystore
+
 # Miscellaneous
 *.class
 *.log
