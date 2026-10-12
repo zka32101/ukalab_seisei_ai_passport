@@ -310,3 +310,5 @@ dart run ukalab_core:validate_content content/exam/seisei_ai_passport.json --ter
 **`app_common_kit`への`sparkle`シンボル取り込みについて**: 当初「取り込み済み」という記録が誤りだったことが判明したが（詳細は`store/icon/README.md`）、2026-10-05に`app_common_kit`側に別セッションを作成して取り込みを依頼し、PR #44で実際にマージされたことを確認済み。
 
 この環境には Dart/Flutter SDK が無いため、本リポジトリでは未実行。`flutter pub get` 可能な開発環境（Windows・英語パス推奨。`ukalab_共通基盤_各資格アプリ向けガイド_v0_2.md` §6 参照）で実行して確認すること。
+
+章ごとの解説読み物（`reading.jsonl`）は各章3節から5〜6節（1章あたり約1,500〜1,800字）へ増量した（contentVer 2。公式文の転載なし・自作）。
