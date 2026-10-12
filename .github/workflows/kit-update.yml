@@ -62,7 +62,7 @@ jobs:
             fi
           } > "$RUNNER_TEMP/body.md"
 
-      - uses: peter-evans/create-pull-request@v7
+      - uses: peter-evans/create-pull-request@v8
         if: steps.bump.outputs.changed == 'true'
         with:
           token: ${{ secrets.KIT_UPDATE_TOKEN || secrets.GITHUB_TOKEN }}
