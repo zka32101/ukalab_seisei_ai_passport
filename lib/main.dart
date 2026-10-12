@@ -4,6 +4,7 @@ import 'package:ukalab_core/achievements.dart'
 import 'package:ukalab_core/daily_goal.dart' show dailyGoalOverrides;
 import 'package:ukalab_core/reminder.dart' show reminderOverrides;
 import 'package:ukalab_core/ui.dart';
+import 'package:flutter/foundation.dart' show kIsWeb, kReleaseMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,28 +20,7 @@ import 'screens/settings_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 課金（RevenueCat）。実際のAPIキー取得後にRevenueCatEntitlementServiceへ差し替える。
-  // 価格は競合調査を踏まえた暫定値で、運営者確認が必要（決定14）。
-  final entitlementService = FakeEntitlementService(
-    availableOffers: const [
-      EntitlementOffer(
-        id: 'noads',
-        productId: 'seisei_ai_passport_noads',
-        title: '広告非表示',
-        priceString: '¥480',
-      ),
-      EntitlementOffer(
-        id: 'premium',
-        productId: 'seisei_ai_passport_premium',
-        title: 'プレミアム（広告非表示＋追加機能）',
-        priceString: '¥1,500',
-      ),
-    ],
-    grantOnPurchase: const {
-      'seisei_ai_passport_noads': EntitlementState(hasNoAds: true),
-      'seisei_ai_passport_premium': EntitlementState(hasPremium: true),
-    },
-  );
+  final entitlementService = await _createEntitlementService();
 
   final studyNotes = await studyNotesOverrides('seisei_ai_passport');
   final dailyGoal = await dailyGoalOverrides('seisei_ai_passport');
@@ -68,6 +48,48 @@ Future<void> main() async {
       container: container,
       child: const UkalabSeiseiAiPassportApp(),
     ),
+  );
+}
+
+/// RevenueCat の公開 SDK キー（Android）。ビルド時に
+/// `--dart-define=REVENUECAT_GOOGLE_KEY=goog_...` で渡す（コミットしない）。
+const _revenueCatGoogleKey = String.fromEnvironment('REVENUECAT_GOOGLE_KEY');
+
+/// 開発・プレビュー用に、購入を「成功した」ことにする。リリースビルドは既定で無効。
+/// Web 版のデモなどでだけ `--dart-define=FAKE_PURCHASES=true` を付ける。
+const _fakePurchases = bool.fromEnvironment('FAKE_PURCHASES');
+
+/// 課金（RevenueCat）。価格は競合調査を踏まえた暫定値で、運営者確認が必要（決定14）。
+///
+/// - Android で公開 SDK キーがあれば RevenueCat を使う。
+/// - それ以外（Web・キー未設定）は疑似実装。リリースビルドでは購入を成功させない
+///   （キーを付け忘れた本番ビルドで、無料でプレミアムが解除されるのを防ぐ）。
+Future<EntitlementService> _createEntitlementService() async {
+  if (!kIsWeb && _revenueCatGoogleKey.isNotEmpty) {
+    return RevenueCatEntitlementService.init(publicSdkKey: _revenueCatGoogleKey);
+  }
+  final grantPurchases = !kReleaseMode || _fakePurchases;
+  return FakeEntitlementService(
+    availableOffers: const [
+      EntitlementOffer(
+        id: 'noads',
+        productId: 'seisei_ai_passport_noads',
+        title: '広告非表示',
+        priceString: '¥480',
+      ),
+      EntitlementOffer(
+        id: 'premium',
+        productId: 'seisei_ai_passport_premium',
+        title: 'プレミアム（広告非表示＋追加機能）',
+        priceString: '¥1,500',
+      ),
+    ],
+    grantOnPurchase: grantPurchases
+        ? const {
+            'seisei_ai_passport_noads': EntitlementState(hasNoAds: true),
+            'seisei_ai_passport_premium': EntitlementState(hasPremium: true),
+          }
+        : const {},
   );
 }
 
