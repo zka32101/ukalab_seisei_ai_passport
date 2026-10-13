@@ -9,6 +9,7 @@ import 'boundary_screen.dart';
 import 'confusion_matrix_screen.dart';
 import 'failure_gallery_screen.dart';
 import 'predict_run_screen.dart';
+import 'exam_prep_entry.dart';
 import 'premium_practice_cards.dart';
 import 'route_planner_screen.dart';
 import 'teach_mascot_screen.dart';
@@ -146,6 +147,8 @@ class HomeScreen extends StatelessWidget {
           const StudyReminderCard(),
           const SizedBox(height: 8),
           PremiumPracticeCards(exam: exam, questions: questions),
+          const SizedBox(height: 8),
+          ExamPrepEntryCard(exam: exam, questions: questions),
           const SizedBox(height: 8),
           StudyNotesHomeCards(loadQuestions: () async => questions),
           for (final entry in _experienceEntries) ...[
