@@ -1,5 +1,6 @@
 import 'package:app_common_kit/app_common_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ukalab_core/achievements.dart' show AchievementsView, dailyGoalAchievementCategoryLabels;
@@ -14,6 +15,15 @@ import '../data/data_parts.dart';
 import '../data/history_store.dart';
 
 /// 「設定」タブ。課金・広告・通知の設定は後続。
+/// インストールされたアプリの版（pubspec の version）。取得できないときは空にして画面は落とさない。
+final appVersionProvider = FutureProvider<String>((ref) async {
+  try {
+    return (await PackageInfo.fromPlatform()).version;
+  } catch (_) {
+    return '';
+  }
+});
+
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key, this.questions = const []});
 
@@ -93,9 +103,10 @@ class SettingsScreen extends ConsumerWidget {
           ),
         ),
         const Divider(height: 1),
-        const ListTile(
-          title: Text('バージョン'),
-          subtitle: Text('0.1.0'),
+        ListTile(
+          title: const Text('バージョン'),
+          // 実際にインストールされた版（pubspec の version）を読む。
+          subtitle: Text(ref.watch(appVersionProvider).valueOrNull ?? ''),
         ),
       ],
     );

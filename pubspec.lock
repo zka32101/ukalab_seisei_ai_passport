@@ -82,6 +82,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.19.1"
+  cross_promo_kit:
+    dependency: transitive
+    description:
+      path: "."
+      ref: "v0.3.0"
+      resolved-ref: "3ac5ac96f0ea4b9f2346f1cadf69b28de3df9aca"
+      url: "https://github.com/zka32101/cross_promo_kit"
+    source: git
+    version: "0.3.0"
   crypto:
     dependency: transitive
     description:
@@ -146,6 +155,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.12.0"
+  firebase_remote_config:
+    dependency: transitive
+    description:
+      name: firebase_remote_config
+      sha256: fa518445638fa3903e359ac544bd3243e72ada025728c8dbfa4b28ae939e8b38
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.7.0"
+  firebase_remote_config_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_remote_config_platform_interface
+      sha256: dc5a9713031f2ca744cb266d96a58609e929db19f3d91a1dd6bb8f8a0d77acad
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.7"
+  firebase_remote_config_web:
+    dependency: transitive
+    description:
+      name: firebase_remote_config_web
+      sha256: "500abf695c370c76a486ad7480a6df7caf55d2d35ccc5c66b9fc9c1c47f2bc14"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.10.14"
   fixnum:
     dependency: transitive
     description:
@@ -201,6 +234,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.1.0"
+  http:
+    dependency: transitive
+    description:
+      name: http
+      sha256: "87721a4a50b19c7f1d49001e51409bddc46303966ce89a65af4f4e6004896412"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.6.0"
+  http_parser:
+    dependency: transitive
+    description:
+      name: http_parser
+      sha256: "178d74305e7866013777bab2c3d8726205dc5a4dd935297175b19a23a2e66571"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.2"
   leak_tracker:
     dependency: transitive
     description:
@@ -257,6 +306,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.18.3"
+  package_info_plus:
+    dependency: "direct main"
+    description:
+      name: package_info_plus
+      sha256: "468c26b4254ab01979fa5e4a98cb343ea3631b9acee6f21028997419a80e1a20"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.0.1"
+  package_info_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: package_info_plus_platform_interface
+      sha256: "202a487f08836a592a6bd4f901ac69b3a8f146af552bbd14407b6b41e1c3f086"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.1"
   path:
     dependency: transitive
     description:
@@ -450,11 +515,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.53.0"
-      resolved-ref: "503aef9395d40ba413300ff4b178f5b4c405cb72"
+      ref: "v0.54.0"
+      resolved-ref: "3b32b7f0486fb6f36461a2ef35443380fbaa63a1"
       url: "https://github.com/zka32101/ukalab_core.git"
     source: git
-    version: "0.53.0"
+    version: "0.54.0"
   url_launcher:
     dependency: "direct main"
     description:
@@ -583,6 +648,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.27.0"
+  win32:
+    dependency: transitive
+    description:
+      name: win32
+      sha256: d7cb55e04cd34096cd3a79b3330245f54cb96a370a1c27adb3c84b917de8b08e
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.15.0"
   xdg_directories:
     dependency: transitive
     description:
