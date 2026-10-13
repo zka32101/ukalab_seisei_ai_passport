@@ -6,7 +6,7 @@ import 'package:app_common_kit/app_common_kit.dart' show FakeEntitlementService,
 import 'package:ukalab_core/daily_goal.dart' show dailyGoalOverrides;
 import 'package:ukalab_core/exam_date.dart';
 import 'package:ukalab_core/reminder.dart' show reminderOverrides;
-import 'package:ukalab_core/ui.dart' show studyNotesOverrides;
+import 'package:ukalab_core/ui.dart' show HomeSectionHeader, studyNotesOverrides;
 import 'package:ukalab_core/ukalab_core.dart';
 import 'package:ukalab_seisei_ai_passport/data/core_features.dart';
 import 'package:ukalab_seisei_ai_passport/screens/boundary_screen.dart';
@@ -56,7 +56,20 @@ Future<void> _pump(
   await tester.pump();
 }
 
+Finder _header(String title) =>
+    find.byWidgetPredicate((w) => w is HomeSectionHeader && w.title == title);
+
+Future<void> _toggle(WidgetTester tester, String section) async {
+  await tester.ensureVisible(_header(section));
+  await tester.pump();
+  await tester.tap(_header(section));
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 300));
+}
+
 Future<void> _open(WidgetTester tester, String title) async {
+  await tester.ensureVisible(find.text(title));
+  await tester.pump();
   await tester.tap(find.text(title));
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 300));
@@ -69,7 +82,7 @@ void main() {
   testWidgets('6分類のうち5つの見出しが表示され、①②③は展開、④⑤は畳まれている', (tester) async {
     await _pump(tester);
     for (final t in ['今日やること', '記録', '試験に向けて', '道具', '体験ラボ']) {
-      expect(find.text(t), findsOneWidget, reason: t);
+      expect(_header(t), findsOneWidget, reason: t);
     }
     expect(find.text('間違いノート'), findsOneWidget);
     expect(find.text('今日やる3つ'), findsOneWidget);
@@ -81,8 +94,8 @@ void main() {
 
   testWidgets('道具と体験ラボを開くと既存の入口がすべて見つかる', (tester) async {
     await _pump(tester);
-    await _open(tester, '道具');
-    await _open(tester, '体験ラボ');
+    await _toggle(tester, '道具');
+    await _toggle(tester, '体験ラボ');
     for (final t in [..._toolTitles, ..._labTitles]) {
       expect(find.text(t, skipOffstage: false), findsOneWidget, reason: t);
     }
@@ -90,27 +103,26 @@ void main() {
 
   testWidgets('入口をタップすると遷移できる（代表）', (tester) async {
     await _pump(tester);
-    await _open(tester, '道具');
+    await _toggle(tester, '道具');
     await _open(tester, '用語集');
     expect(find.byType(GlossaryScreen), findsOneWidget);
     Navigator.of(tester.element(find.byType(GlossaryScreen))).pop();
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
 
-    await _open(tester, '体験ラボ');
-    await tester.ensureVisible(find.text('境界線スライダー'));
+    await _toggle(tester, '体験ラボ');
     await _open(tester, '境界線スライダー');
     expect(find.byType(BoundaryScreen), findsOneWidget);
   });
 
   testWidgets('折りたたみの開閉が SharedPreferences に保存され、再表示で復元される', (tester) async {
     await _pump(tester);
-    await _open(tester, '体験ラボ');
+    await _toggle(tester, '体験ラボ');
     expect(find.text('温度の実験室'), findsOneWidget);
     final prefs = await SharedPreferences.getInstance();
     expect(prefs.getBool('ukalab_seisei_home_section_lab'), isTrue);
 
-    await _open(tester, '記録');
+    await _toggle(tester, '記録');
     expect(find.text('収録問題数'), findsNothing);
     expect(prefs.getBool('ukalab_seisei_home_section_record'), isFalse);
 
