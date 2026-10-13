@@ -3,12 +3,11 @@ import 'dart:async';
 import 'package:app_common_kit/app_common_kit.dart' hide SettingsScreen;
 import 'package:ukalab_core/achievements.dart'
     show achievementUnlockOverrides, dailyGoalAchievementsOverride, watchAchievementUnlocks;
+import 'package:ukalab_core/cross_promo.dart' show UkalabCrossPromo;
 import 'package:ukalab_core/daily_goal.dart' show dailyGoalOverrides;
 import 'package:ukalab_core/reminder.dart' show reminderOverrides;
 import 'package:ukalab_core/ui.dart';
 import 'package:flutter/material.dart';
-import 'package:cross_promo_kit/cross_promo_kit.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:ukalab_core/exam_date.dart';
@@ -23,13 +22,8 @@ import 'screens/settings_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Firebase（相互紹介の Remote Config 用）。firebase_options / google-services.json が
-  // 未配置の間は失敗するが、アプリ起動は止めない。
-  try {
-    await Firebase.initializeApp();
-  } catch (_) {}
-  // init() は失敗しても例外を投げない。取得完了後に紹介カードが自動表示される。
-  unawaited(CrossPromoService.init());
+  // 相互紹介（Firebase 初期化 + Remote Config 取得）。失敗しても例外を投げず、起動も止めない。
+  unawaited(UkalabCrossPromo.init());
 
   // 課金（RevenueCat）。実際のAPIキー取得後にRevenueCatEntitlementServiceへ差し替える。
   // 価格は競合調査を踏まえた暫定値で、運営者確認が必要（決定14）。
