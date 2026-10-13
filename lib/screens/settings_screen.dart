@@ -15,6 +15,15 @@ import '../data/data_parts.dart';
 import '../data/history_store.dart';
 
 /// 「設定」タブ。課金・広告・通知の設定は後続。
+/// インストールされたアプリの版（pubspec の version）。取得できないときは空にして画面は落とさない。
+final appVersionProvider = FutureProvider<String>((ref) async {
+  try {
+    return (await PackageInfo.fromPlatform()).version;
+  } catch (_) {
+    return '';
+  }
+});
+
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key, this.questions = const []});
 
@@ -97,11 +106,7 @@ class SettingsScreen extends ConsumerWidget {
         ListTile(
           title: const Text('バージョン'),
           // 実際にインストールされた版（pubspec の version）を読む。
-          subtitle: FutureBuilder<PackageInfo>(
-            future: PackageInfo.fromPlatform(),
-            builder: (context, snapshot) =>
-                Text(snapshot.hasData ? snapshot.data!.version : ''),
-          ),
+          subtitle: Text(ref.watch(appVersionProvider).valueOrNull ?? ''),
         ),
       ],
     );
