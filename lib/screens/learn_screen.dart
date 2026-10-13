@@ -2,6 +2,7 @@ import 'package:app_common_kit/app_common_kit.dart';
 import 'package:app_common_kit/hands_free_tts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ukalab_core/answer_feedback.dart' show AnswerFeedbackPanel;
 import 'package:ukalab_core/daily_goal.dart' show recordDailyAnswer;
 import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_core/ukalab_core.dart';
@@ -157,6 +158,15 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
             ExplanationPanel(
               body: q.explanation,
               sourceRef: q.sourceRef,
+            ),
+            const SizedBox(height: 12),
+            // 不正解のときだけ表示される（原因ラベル・対策）。選択肢は並べ替えていないので元の番号のまま渡す。
+            AnswerFeedbackPanel(
+              key: ValueKey('feedback-${q.qid}'),
+              question: q,
+              selectedIndex: _selected,
+              includeCalculation: false,
+              onCause: (c) => ref.read(historyProvider.notifier).setCause(q.qid, c),
             ),
             const SizedBox(height: 12),
             QuestionMemoField(key: ValueKey(q.qid), qid: q.qid),

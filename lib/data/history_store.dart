@@ -37,6 +37,14 @@ class HistoryNotifier extends Notifier<List<ProgressRecord>> {
     await prefs.setString(_key, encodeHistory(state));
   }
 
+  /// 直近の誤答記録（[qid]）に原因ラベルを後付けして保存する。[cause] が null なら外す。
+  Future<void> setCause(String qid, WrongCause? cause) async {
+    await _loaded;
+    state = attachCauseToLatest(state, qid, cause);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_key, encodeHistory(state));
+  }
+
   /// バックアップの読み込み時に呼ぶ。[records] で上書きする。
   Future<void> replace(List<ProgressRecord> records) async {
     await _loaded;
