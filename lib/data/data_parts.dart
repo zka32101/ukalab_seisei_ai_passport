@@ -7,11 +7,12 @@ import 'package:ukalab_core/ukalab_core.dart';
 
 import 'core_features.dart';
 import 'history_store.dart';
+import 'mistake_notes.dart';
 import 'srs_repository.dart';
 
 /// 設定タブの「データの管理」（書き出し・読み込み・リセット）の対象。
 ///
-/// 解答履歴・間隔反復の記録・自分用メモが対象。試験日・ブックマークは
+/// 解答履歴・間隔反復の記録・自分用メモ・間違いノートが対象。試験日・ブックマークは
 /// ユーザー設定・curationとして扱い、含めない。
 final List<DataPart> seiseiDataParts = [
   achievementUnlockDataPart,
@@ -70,4 +71,6 @@ final List<DataPart> seiseiDataParts = [
     restore: (ref, json) => ref.read(checklistProvider.notifier).restore((json as List).cast<String>()),
     reset: (ref) => ref.read(checklistProvider.notifier).reset(),
   ),
+  // 間違いノート(間違えた問題ID・日時・原因・分野・回数。端末内)。
+  mistakeNoteDataPart(mistakeNoteStore),
 ];
