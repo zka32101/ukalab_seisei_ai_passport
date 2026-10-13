@@ -72,11 +72,17 @@ void main() {
     expect(unconfirmedItems(items).length, items.length);
   });
 
-  testWidgets('試験日の3日前より前は、試験直前の行とチェックリストを出さない', (tester) async {
-    await _pump(tester, exam: _exam(dates: [DateTime(2026, 12, 20)]));
+  testWidgets('試験日が未設定なら、試験直前の行とチェックリストを出さない', (tester) async {
+    await _pump(tester);
     expect(find.byKey(const ValueKey('tenMinPlanTile')), findsOneWidget);
     expect(find.byKey(const ValueKey('examEveTile')), findsNothing);
     expect(find.byKey(const ValueKey('checklistTile')), findsNothing);
+  });
+
+  testWidgets('試験日の3日前より前は、試験直前の行を出さない', (tester) async {
+    await _pump(tester, exam: _exam(dates: [DateTime(2026, 12, 20)]));
+    expect(find.byKey(const ValueKey('examEveTile')), findsNothing);
+    expect(find.byKey(const ValueKey('checklistTile')), findsOneWidget);
   });
 
   testWidgets('試験日の3日前以内なら、試験直前とチェックリストを出す', (tester) async {
@@ -96,7 +102,9 @@ void main() {
     final c = await _pump(tester, exam: _exam(dates: [DateTime(2026, 11, 22)]));
     await tester.runAsync(() => c.read(checklistProvider.notifier).ready);
     await tester.tap(find.byKey(const ValueKey('checklistTile')));
-    await tester.pumpAndSettle();
+    await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 300)));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
     expect(find.byType(ExamDayChecklistView), findsOneWidget);
     expect(find.text('公式で要確認'), findsWidgets);
     await tester.tap(find.byType(CheckboxListTile).first);
@@ -144,7 +152,9 @@ void main() {
     await tester.pump();
     expect(find.byType(HistoryExportView), findsNothing);
     await tester.tap(find.byKey(const ValueKey('updateLogTile')));
-    await tester.pumpAndSettle();
+    await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 300)));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
     expect(find.byType(UpdateLogView), findsOneWidget);
   });
 }
