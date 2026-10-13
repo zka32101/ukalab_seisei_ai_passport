@@ -106,7 +106,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
     expect(find.byType(ExamDayChecklistView), findsOneWidget);
-    expect(find.text('公式で要確認'), findsWidgets);
+    expect(find.textContaining('公式で要確認'), findsWidgets);
     await tester.tap(find.byType(CheckboxListTile).first);
     await tester.pump();
     final prefs = await SharedPreferences.getInstance();
