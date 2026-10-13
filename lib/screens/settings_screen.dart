@@ -1,5 +1,6 @@
 import 'package:app_common_kit/app_common_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ukalab_core/achievements.dart' show AchievementsView, dailyGoalAchievementCategoryLabels;
@@ -93,9 +94,14 @@ class SettingsScreen extends ConsumerWidget {
           ),
         ),
         const Divider(height: 1),
-        const ListTile(
-          title: Text('バージョン'),
-          subtitle: Text('0.1.0'),
+        ListTile(
+          title: const Text('バージョン'),
+          // 実際にインストールされた版（pubspec の version）を読む。
+          subtitle: FutureBuilder<PackageInfo>(
+            future: PackageInfo.fromPlatform(),
+            builder: (context, snapshot) =>
+                Text(snapshot.hasData ? snapshot.data!.version : ''),
+          ),
         ),
       ],
     );
