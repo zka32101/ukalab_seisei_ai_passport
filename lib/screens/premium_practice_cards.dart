@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ukalab_core/ukalab_core.dart';
 
+import 'package:ukalab_core/answer_feedback.dart' show WeakSummaryCard, canShowWeakSummary;
 import 'package:ukalab_core/exam_date.dart';
 import '../data/history_store.dart';
 import 'learn_screen.dart';
@@ -75,10 +76,20 @@ class PremiumPracticeCards extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // タップ時に読むだけだと未購読で読み込み中のまま「無料」と判定されるため、ここで購読しておく。
-    ref.watch(entitlementStateProvider);
+    final isPremium =
+        (ref.watch(entitlementStateProvider).valueOrNull ?? EntitlementState.free).hasPremium;
     final eve = examEveStatus(effectiveExamDates(ref.watch(examDateProvider), exam.examDates), clock());
     return Column(
       children: [
+        if (canShowWeakSummary(isPremium: isPremium)) ...[
+          WeakSummaryCard(
+            records: ref.watch(historyProvider),
+            now: clock(),
+            questions: questions,
+            includeCalculation: false,
+          ),
+          const SizedBox(height: 16),
+        ],
         Card(
           child: ListTile(
             leading: const Icon(Icons.trending_down),
