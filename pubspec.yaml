@@ -32,6 +32,15 @@ dependencies:
 
   # ながら学習モードの読み上げ（端末標準の音声合成）
 
+  # うかラボ同士の相互紹介（Remote Config 配信）。タグ固定。
+  # firebase_* は cross_promo_kit の許容レンジ（>=4.0.0 <7.0.0）内で、既存の firebase_core 4.15 と解決できる版。
+  firebase_core: ^4.15.0
+  firebase_remote_config: ^6.7.0
+  cross_promo_kit:
+    git:
+      url: https://github.com/zka32101/cross_promo_kit
+      ref: v0.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
