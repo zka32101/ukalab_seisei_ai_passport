@@ -6,6 +6,7 @@ import 'package:ukalab_core/daily_goal.dart' show recordDailyAnswer;
 import 'package:ukalab_core/ukalab_core.dart';
 
 import '../data/history_store.dart';
+import '../data/review_schedule.dart';
 import '../data/srs_repository.dart';
 
 /// ながらセッション1回あたりの上限問数(おつかれさまで区切る)。
@@ -86,7 +87,9 @@ class NagaraSessionScreen extends ConsumerWidget {
     final q = matches.first;
     ref.read(srsProvider.notifier).recordAnswer(qid: q.qid, correct: correct);
     recordDailyAnswer(ref);
-    ref.read(historyProvider.notifier).record(q, correct: correct);
+    final at = DateTime.now();
+    ref.read(historyProvider.notifier).record(q, correct: correct, at: at);
+    recordReviewResult(q.qid, correct: correct, at: at);
   }
 
   @override

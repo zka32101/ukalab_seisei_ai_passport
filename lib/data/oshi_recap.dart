@@ -78,3 +78,16 @@ String Function(String topicId) topicLabelFor(
   }
   return (id) => byTopic[id] ?? id;
 }
+
+/// 推しの成長演出に渡す累計。回答数と学習日数(連続ではなく合計)を解答履歴から数える。
+/// 履歴は端末内に直近 [historyMaxRecords] 件まで保存されるため、それより古い分は含まれない。
+OshiGrowthProgress oshiGrowthProgressFor(List<ProgressRecord> records) => OshiGrowthProgress(
+      totalAnswered: records.length,
+      studyDays: {for (final r in records) _day(r.at)}.length,
+    );
+
+/// 模擬試験の結果分析に渡す回答。直近 [limit] 件の解答履歴を、科目(subjectId)単位で渡す。
+List<MockExamAnswer> mockExamAnswersFrom(List<ProgressRecord> records, {int limit = 200}) {
+  final recent = records.length > limit ? records.sublist(records.length - limit) : records;
+  return [for (final r in recent) MockExamAnswer(topicId: r.subjectId, correct: r.correct)];
+}

@@ -7,6 +7,7 @@ import 'package:ukalab_core/ukalab_core.dart';
 
 import 'ai_news_screen.dart';
 import 'boundary_screen.dart';
+import 'core_v069_cards.dart';
 import 'confusion_matrix_screen.dart';
 import 'failure_gallery_screen.dart';
 import 'predict_run_screen.dart';
@@ -176,6 +177,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 const DailyMissionCard(),
                 const StudyReminderCard(),
+                TodayReviewHomeCard(exam: exam, questions: questions),
                 const SizedBox(height: 8),
                 NagaraEntryCard(questions: questions),
                 const SizedBox(height: 8),
@@ -202,6 +204,10 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 WeeklyRecapSection(exam: exam, questions: questions),
+                const SizedBox(height: 8),
+                MockExamAnalysisHomeCard(exam: exam),
+                const SizedBox(height: 8),
+                const OshiGrowthHomeCard(),
                 const SizedBox(height: 8),
                 Card(
                   margin: EdgeInsets.zero,

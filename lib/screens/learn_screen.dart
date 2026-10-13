@@ -8,6 +8,7 @@ import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_core/ukalab_core.dart';
 
 import '../data/history_store.dart';
+import '../data/review_schedule.dart';
 import '../data/srs_repository.dart';
 
 /// 「学ぶ」タブ: 短い演習セッション。解答ごとに間隔反復（記録タブ）の記録を更新する。
@@ -76,11 +77,15 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
         .read(srsProvider.notifier)
         .recordAnswer(qid: q.qid, correct: i == q.answerIndex);
     recordDailyAnswer(ref);
+    final at = DateTime.now();
     ref.read(historyProvider.notifier).record(
           q,
           correct: i == q.answerIndex,
-          ms: DateTime.now().difference(_shownAt).inMilliseconds,
+          ms: at.difference(_shownAt).inMilliseconds,
+          at: at,
         );
+    // 今日の復習の対象なら、結果を復習日程に反映する(履歴と同じ時刻)。
+    recordReviewResult(q.qid, correct: i == q.answerIndex, at: at);
   }
 
   void _next() {

@@ -150,6 +150,19 @@ class _MockExamScreenState extends ConsumerState<MockExamScreen> {
                 passRatio: 0.70,
                 onRetry: _start,
               ),
+              const SizedBox(height: 16),
+              // この模擬試験の分野別の様子(科目ごと)。点数では責めず、次に少しだけやる分野を出す。
+              MockExamAnalysisCard(
+                analysis: const MockExamAnalysisEngine().analyze([
+                  for (final q in _picked)
+                    if (_answers[q.qid] != null)
+                      MockExamAnswer(
+                        topicId: q.subjectId,
+                        correct: _answers[q.qid] == q.answerIndex,
+                      ),
+                ]),
+                topicLabel: (id) => widget.exam.subject(id)?.name ?? id,
+              ),
               if (history.length > 1) ...[
                 const SizedBox(height: 16),
                 Text('成長グラフ', style: Theme.of(context).textTheme.titleMedium),
