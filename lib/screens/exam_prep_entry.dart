@@ -30,6 +30,55 @@ void _openPractice(BuildContext context, String title, List<Question> pool, Stri
   ));
 }
 
+/// ホームの試験日カウントダウン(チップ)。未設定なら何も出ない。無料。
+/// タップで試験日の設定を開く。文言・段階は ukalab_core(`ExamCountdownChip`)。
+/// 直近の未来の試験日を使う。未来が無く、利用者が設定した日が過ぎているときだけ「おつかれさまでした」。
+class ExamCountdownEntry extends ConsumerWidget {
+  const ExamCountdownEntry({super.key, required this.exam, this.clock = DateTime.now});
+
+  final ExamConfig exam;
+  final DateTime Function() clock;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final now = clock();
+    final today = DateTime(now.year, now.month, now.day);
+    final saved = ref.watch(examDateProvider);
+    final upcoming = effectiveExamDates(saved, exam.examDates)
+        .where((d) => !d.isBefore(today))
+        .toList()
+      ..sort();
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: ExamCountdownChip(
+        examDate: upcoming.isEmpty ? saved : upcoming.first,
+        clock: clock,
+        onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(
+          builder: (_) => const ExamDateSettingsScreen(),
+        )),
+      ),
+    );
+  }
+}
+
+/// 試験日の設定だけを開く画面(設定タブと同じ `ExamDateTile`)。
+class ExamDateSettingsScreen extends ConsumerWidget {
+  const ExamDateSettingsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('試験日の設定')),
+      body: ListView(children: [
+        ExamDateTile(
+          date: ref.watch(examDateProvider),
+          onChanged: (d) => ref.read(examDateProvider.notifier).setDate(d),
+        ),
+      ]),
+    );
+  }
+}
+
 /// ホームの「試験に向けて」カード（10分プラン・試験直前・当日チェックリスト）。
 class ExamPrepEntryCard extends ConsumerWidget {
   const ExamPrepEntryCard({

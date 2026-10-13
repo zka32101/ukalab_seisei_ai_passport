@@ -164,6 +164,8 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 8),
           PremiumPracticeCards(exam: exam, questions: questions),
           const SizedBox(height: 8),
+          ExamCountdownEntry(exam: exam),
+          const SizedBox(height: 4),
           ExamPrepEntryCard(exam: exam, questions: questions),
           const SizedBox(height: 8),
           StudyNotesHomeCards(loadQuestions: () async => questions),
