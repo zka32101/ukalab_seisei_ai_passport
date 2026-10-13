@@ -98,11 +98,13 @@ void main() {
     final one = [_q('q1')];
     final c = await _pump(tester, NagaraEntryCard(questions: one), speech);
     await tester.runAsync(() => c.read(historyProvider.notifier).ready);
+    await tester.runAsync(() => c.read(srsProvider.future));
 
     await answerOnce(tester, c, 'machigai');
     expect(c.read(historyProvider).map((r) => r.correct), [false]);
     await answerOnce(tester, c, 'seikai');
     expect(c.read(historyProvider).map((r) => r.correct), [false, true]);
+    await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 200)));
     final stat = c.read(srsProvider).requireValue.stats['q1']!;
     expect(stat.attempts, 2);
     expect(stat.correct, 1);
