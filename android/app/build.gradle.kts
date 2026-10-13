@@ -64,6 +64,14 @@ android {
             } else {
                 signingConfigs.getByName("debug")
             }
+            // R8がWorkManager(Room)/Firebaseのリフレクション経由のクラスを削って、起動直後に
+            // 「Failed to create an instance of androidx.work.impl.WorkDatabase」で落ちるため、
+            // keepルール(proguard-rules.pro)を適用する。
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
         }
     }
 }
