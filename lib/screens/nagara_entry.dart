@@ -71,7 +71,7 @@ void openNagaraSession(BuildContext context, List<Question> questions, {int? see
   );
 }
 
-/// ながらセッション画面。誤答は通常の解答と同じ経路(間隔反復・今日の目標・解答履歴)に載せる。
+/// ながらセッション画面。タップ解答(正答・誤答とも)は通常の解答と同じ経路(間隔反復・今日の目標・解答履歴)に載せる。
 /// 解答履歴に載れば、間違いノートは開いたときに取り込む。
 class NagaraSessionScreen extends ConsumerWidget {
   const NagaraSessionScreen({super.key, required this.questions, required this.picked});
@@ -80,13 +80,13 @@ class NagaraSessionScreen extends ConsumerWidget {
   final List<Question> questions;
   final List<NagaraQuestion> picked;
 
-  void _onWrong(WidgetRef ref, NagaraQuestion nq) {
+  void _onAnswered(WidgetRef ref, NagaraQuestion nq, bool correct) {
     final matches = questions.where((q) => q.qid == nq.id);
     if (matches.isEmpty) return;
     final q = matches.first;
-    ref.read(srsProvider.notifier).recordAnswer(qid: q.qid, correct: false);
+    ref.read(srsProvider.notifier).recordAnswer(qid: q.qid, correct: correct);
     recordDailyAnswer(ref);
-    ref.read(historyProvider.notifier).record(q, correct: false);
+    ref.read(historyProvider.notifier).record(q, correct: correct);
   }
 
   @override
@@ -96,7 +96,7 @@ class NagaraSessionScreen extends ConsumerWidget {
       body: NagaraSessionView(
         questions: picked,
         maxQuestions: kNagaraSessionSize,
-        onWrongAnswer: (nq, chosen) => _onWrong(ref, nq),
+        onAnswered: (nq, chosen, correct) => _onAnswered(ref, nq, correct),
         onClose: () => Navigator.of(context).maybePop(),
       ),
     );

@@ -11,6 +11,8 @@ import 'package:ukalab_core/reminder.dart' show reminderOverrides;
 import 'package:ukalab_core/ui.dart' show studyNotesOverrides;
 import 'package:ukalab_core/ukalab_core.dart';
 import 'package:ukalab_seisei_ai_passport/data/history_store.dart';
+import 'package:ukalab_seisei_ai_passport/data/mistake_notes.dart';
+import 'package:ukalab_seisei_ai_passport/data/srs_repository.dart';
 import 'package:ukalab_seisei_ai_passport/screens/learn_screen.dart';
 import 'package:ukalab_seisei_ai_passport/screens/nagara_entry.dart';
 import 'package:ukalab_seisei_ai_passport/screens/settings_screen.dart';
@@ -80,19 +82,66 @@ void main() {
     await _leave(tester);
   });
 
-  testWidgets('誤答は解答履歴(間違いノートの元)に載り、正答では載らない', (tester) async {
+  /// 単問のプールでながらセッションを開き、[choice] をタップして、記録が済むまで待つ。
+  Future<void> answerOnce(WidgetTester tester, ProviderContainer c, String choice) async {
+    await tester.tap(find.text('ながら学習'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(choice));
+    await tester.pump();
+    await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 100)));
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('正答も誤答も1問1回ずつ、履歴と間隔反復に載る(二重に載らない)', (tester) async {
     final speech = FakeSpeechBackend()..holdUntilReleased = true;
-    final c = await _pump(tester, NagaraEntryCard(questions: questions), speech);
+    final one = [_q('q1')];
+    final c = await _pump(tester, NagaraEntryCard(questions: one), speech);
+    await tester.runAsync(() => c.read(historyProvider.notifier).ready);
+
+    await answerOnce(tester, c, 'machigai');
+    expect(c.read(historyProvider).map((r) => r.correct), [false]);
+    await answerOnce(tester, c, 'seikai');
+    expect(c.read(historyProvider).map((r) => r.correct), [false, true]);
+    final stat = c.read(srsProvider).requireValue.stats['q1']!;
+    expect(stat.attempts, 2);
+    expect(stat.correct, 1);
+    await _leave(tester);
+  });
+
+  testWidgets('スキップ・未回答は載らない', (tester) async {
+    final speech = FakeSpeechBackend();
+    final c = await _pump(tester, NagaraEntryCard(questions: [_q('q1'), _q('q2')]), speech);
     await tester.runAsync(() => c.read(historyProvider.notifier).ready);
     await tester.tap(find.text('ながら学習'));
     await tester.pumpAndSettle();
-
-    await tester.tap(find.text('machigai'));
+    await tester.tap(find.text(NagaraStrings.ja.skip));
     await tester.pump();
+    // 何も答えずに考える間・次の問題までの間が過ぎても、解答にはならない。
+    await tester.pump(const Duration(seconds: 120));
     await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 100)));
-    final records = c.read(historyProvider);
-    expect(records, hasLength(1));
-    expect(records.single.correct, isFalse);
+    expect(c.read(historyProvider), isEmpty);
+    await _leave(tester);
+  });
+
+  testWidgets('誤答のあと2回続けて正解すると、間違いノートで克服になる', (tester) async {
+    final speech = FakeSpeechBackend()..holdUntilReleased = true;
+    final one = [_q('q1')];
+    final c = await _pump(tester, NagaraEntryCard(questions: one), speech);
+    await tester.runAsync(() => c.read(historyProvider.notifier).ready);
+
+    await answerOnce(tester, c, 'machigai');
+    final afterWrong = mistakeNoteEngine.update(const [], c.read(historyProvider));
+    expect(afterWrong.map((e) => e.qid), ['q1']);
+    expect(afterWrong.single.overcome, isFalse);
+
+    await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 5)));
+    await answerOnce(tester, c, 'seikai');
+    await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 5)));
+    await answerOnce(tester, c, 'seikai');
+    final after = mistakeNoteEngine.update(afterWrong, c.read(historyProvider));
+    expect(after.single.overcome, isTrue);
+    expect(mistakeNoteEngine.newlyOvercome(afterWrong, after), ['q1']);
     await _leave(tester);
   });
 
