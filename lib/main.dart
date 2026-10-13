@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:app_common_kit/app_common_kit.dart' hide SettingsScreen;
 import 'package:ukalab_core/achievements.dart'
     show achievementUnlockOverrides, dailyGoalAchievementsOverride, watchAchievementUnlocks;
+import 'package:ukalab_core/cross_promo.dart' show UkalabCrossPromo;
 import 'package:ukalab_core/daily_goal.dart' show dailyGoalOverrides;
 import 'package:ukalab_core/reminder.dart' show reminderOverrides;
 import 'package:ukalab_core/ui.dart';
@@ -18,6 +21,9 @@ import 'screens/settings_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // 相互紹介（Firebase 初期化 + Remote Config 取得）。失敗しても例外を投げず、起動も止めない。
+  unawaited(UkalabCrossPromo.init());
 
   // 課金（RevenueCat）。実際のAPIキー取得後にRevenueCatEntitlementServiceへ差し替える。
   // 価格は競合調査を踏まえた暫定値で、運営者確認が必要（決定14）。
