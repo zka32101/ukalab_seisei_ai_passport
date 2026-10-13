@@ -12,6 +12,7 @@ import 'predict_run_screen.dart';
 import 'oshi_home_cards.dart';
 import 'exam_prep_entry.dart';
 import 'mistake_note_screen.dart';
+import 'nagara_entry.dart';
 import 'premium_practice_cards.dart';
 import 'route_planner_screen.dart';
 import 'teach_mascot_screen.dart';
@@ -161,6 +162,8 @@ class HomeScreen extends StatelessWidget {
               onTap: () => openMistakeNote(context, exam: exam, questions: questions),
             ),
           ),
+          const SizedBox(height: 8),
+          NagaraEntryCard(questions: questions),
           const SizedBox(height: 8),
           PremiumPracticeCards(exam: exam, questions: questions),
           const SizedBox(height: 8),

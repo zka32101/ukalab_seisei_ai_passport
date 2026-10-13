@@ -65,6 +65,29 @@ class SettingsScreen extends ConsumerWidget {
             value: handsFree.speakQuestion,
             onChanged: (v) => ref.read(handsFreeProvider.notifier).setSpeakQuestion(v),
           ),
+        // ながらセッション(ホームの「ながら学習」)の設定。ながら学習モードの ON/OFF とは独立。
+        SwitchListTile(
+          title: const Text('解説を読み上げる'),
+          value: handsFree.speakExplanation,
+          onChanged: (v) => ref.read(handsFreeProvider.notifier).setSpeakExplanation(v),
+        ),
+        _SecondsTile(
+          title: KitStrings.of(context).nagara.settingsThinkSeconds,
+          value: handsFree.thinkSeconds,
+          options: HandsFreeSettings.thinkSecondsOptions,
+          onChanged: (v) => ref.read(handsFreeProvider.notifier).setThinkSeconds(v),
+        ),
+        _SecondsTile(
+          title: KitStrings.of(context).nagara.settingsBetweenSeconds,
+          value: handsFree.betweenSeconds,
+          options: HandsFreeSettings.betweenSecondsOptions,
+          onChanged: (v) => ref.read(handsFreeProvider.notifier).setBetweenSeconds(v),
+        ),
+        SwitchListTile(
+          title: Text(KitStrings.of(context).nagara.settingsAutoAdvance),
+          value: handsFree.autoAdvance,
+          onChanged: (v) => ref.read(handsFreeProvider.notifier).setAutoAdvance(v),
+        ),
         ExamDateTile(
           date: ref.watch(examDateProvider),
           onChanged: (d) => ref.read(examDateProvider.notifier).setDate(d),
@@ -123,6 +146,38 @@ class SettingsScreen extends ConsumerWidget {
           subtitle: Text(ref.watch(appVersionProvider).valueOrNull ?? ''),
         ),
       ],
+    );
+  }
+}
+
+/// 秒数を候補から選ぶ行。保存済みの値が候補に無くても(旧データ・手編集)そのまま表示する。
+class _SecondsTile extends StatelessWidget {
+  const _SecondsTile({
+    required this.title,
+    required this.value,
+    required this.options,
+    required this.onChanged,
+  });
+
+  final String title;
+  final int value;
+  final List<int> options;
+  final ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final items = {...options, value}.toList()..sort();
+    return ListTile(
+      title: Text(title),
+      trailing: DropdownButton<int>(
+        value: value,
+        items: [
+          for (final v in items) DropdownMenuItem(value: v, child: Text('$v秒')),
+        ],
+        onChanged: (v) {
+          if (v != null) onChanged(v);
+        },
+      ),
     );
   }
 }
