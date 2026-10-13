@@ -1,0 +1,6 @@
+{"itemId":"c-notice","examId":"seisei_ai_passport","category":"admission","label":"受験案内（日時・受験方法・申込内容）を確かめた","note":"公式の受験案内で確認する"}
+{"itemId":"c-id","examId":"seisei_ai_passport","category":"admission","label":"本人確認の方法を確かめた","note":"公式の受験案内で確認する"}
+{"itemId":"c-belongings","examId":"seisei_ai_passport","category":"belongings","label":"持ち物・持ち込める物を確かめた","note":"公式の受験案内で確認する"}
+{"itemId":"c-time","examId":"seisei_ai_passport","category":"travel","label":"開始時刻と、余裕をもった集合・接続の時刻を確かめた","note":"公式の受験案内で確認する"}
+{"itemId":"c-place","examId":"seisei_ai_passport","category":"travel","label":"受験する場所と、そこまでの行き方を確かめた","note":"公式の受験案内で確認する"}
+{"itemId":"c-env","examId":"seisei_ai_passport","category":"environment","label":"受験に必要な機器・通信環境の条件を確かめた","note":"公式の受験案内で確認する"}

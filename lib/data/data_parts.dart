@@ -5,6 +5,7 @@ import 'package:ukalab_core/glossary.dart' show LearnedTermsStore, learnedTermsD
 import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_core/ukalab_core.dart';
 
+import 'core_features.dart';
 import 'history_store.dart';
 import 'srs_repository.dart';
 
@@ -62,5 +63,11 @@ final List<DataPart> seiseiDataParts = [
     restore: (ref, json) =>
         ref.read(questionMemoProvider.notifier).restore((json as Map<String, dynamic>).cast<String, String>()),
     reset: (ref) => ref.read(questionMemoProvider.notifier).reset(),
+  ),
+  DataPart(
+    id: 'examChecklist',
+    export: (ref) => ref.read(checklistProvider).checkedIds.toList()..sort(),
+    restore: (ref, json) => ref.read(checklistProvider.notifier).restore((json as List).cast<String>()),
+    reset: (ref) => ref.read(checklistProvider.notifier).reset(),
   ),
 ];

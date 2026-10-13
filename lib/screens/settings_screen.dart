@@ -13,6 +13,7 @@ import 'package:ukalab_core/ukalab_core.dart' show Question, historyCsv;
 import 'package:ukalab_core/exam_date.dart';
 import '../data/data_parts.dart';
 import '../data/history_store.dart';
+import 'exam_prep_entry.dart';
 
 /// 「設定」タブ。課金・広告・通知の設定は後続。
 /// インストールされたアプリの版（pubspec の version）。取得できないときは空にして画面は落とさない。
@@ -69,6 +70,7 @@ class SettingsScreen extends ConsumerWidget {
           subtitle: const Text('日ごと・分野ごとの解答数と正答率。個人情報は含みません。'),
           onTap: () => _copyHistory(context, ref),
         ),
+        ExamPrepSettingsEntry(questions: questions),
         const Divider(height: 32),
         const DailyGoalSetting(),
         const Divider(height: 32),
@@ -76,7 +78,7 @@ class SettingsScreen extends ConsumerWidget {
         const Divider(height: 32),
         DataManagementSection(
           parts: seiseiDataParts,
-          description: '解答履歴・間隔反復の記録・自分用メモは、試験日・ブックマークを除いて、'
+          description: '解答履歴・間隔反復の記録・自分用メモ・当日チェックリストは、試験日・ブックマークを除いて、'
               '書き出し・読み込み・リセットができます。',
         ),
         const Divider(height: 32),
