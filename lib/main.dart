@@ -1,9 +1,12 @@
+import 'dart:io' show Platform;
+
 import 'package:app_common_kit/app_common_kit.dart' hide SettingsScreen;
 import 'package:ukalab_core/achievements.dart'
     show achievementUnlockOverrides, dailyGoalAchievementsOverride, watchAchievementUnlocks;
 import 'package:ukalab_core/daily_goal.dart' show dailyGoalOverrides;
 import 'package:ukalab_core/reminder.dart' show reminderOverrides;
 import 'package:ukalab_core/ui.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,12 +19,21 @@ import 'screens/mock_exam_screen.dart';
 import 'screens/record_screen.dart';
 import 'screens/settings_screen.dart';
 
+/// RevenueCat の公開SDKキー（Google Play 用）。ビルド時に
+/// `--dart-define=RC_GOOGLE_KEY=goog_...` で渡す。コミットしない。
+/// 未指定（空）の間は、これまでどおり仮の購入サービス（FakeEntitlementService）で動く。
+const _rcGoogleKey = String.fromEnvironment('RC_GOOGLE_KEY');
+bool get _useRevenueCat => !kIsWeb && Platform.isAndroid && _rcGoogleKey.isNotEmpty;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 課金（RevenueCat）。実際のAPIキー取得後にRevenueCatEntitlementServiceへ差し替える。
-  // 価格は競合調査を踏まえた暫定値で、運営者確認が必要（決定14）。
-  final entitlementService = FakeEntitlementService(
+  // 課金。RC_GOOGLE_KEY が渡されたAndroidビルドだけ RevenueCat を使い、それ以外は
+  // 仮の購入サービス。価格（仮サービス側）は競合調査を踏まえた暫定値で、運営者確認が必要（決定14）。
+  // RevenueCat 側は entitlement ID を 'noads' / 'premium'、商品を現行オファリングに登録する。
+  final EntitlementService entitlementService = _useRevenueCat
+      ? await RevenueCatEntitlementService.init(publicSdkKey: _rcGoogleKey)
+      : FakeEntitlementService(
     availableOffers: const [
       EntitlementOffer(
         id: 'noads',
