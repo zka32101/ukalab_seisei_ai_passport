@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ukalab_core/exam_date.dart';
-import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_core/ukalab_core.dart';
 import 'package:ukalab_seisei_ai_passport/data/core_features.dart';
 import 'package:ukalab_seisei_ai_passport/screens/boundary_screen.dart';
