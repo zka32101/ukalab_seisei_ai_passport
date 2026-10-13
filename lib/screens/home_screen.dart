@@ -9,7 +9,9 @@ import 'boundary_screen.dart';
 import 'confusion_matrix_screen.dart';
 import 'failure_gallery_screen.dart';
 import 'predict_run_screen.dart';
+import 'oshi_home_cards.dart';
 import 'exam_prep_entry.dart';
+import 'mistake_note_screen.dart';
 import 'premium_practice_cards.dart';
 import 'route_planner_screen.dart';
 import 'teach_mascot_screen.dart';
@@ -143,8 +145,22 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
+          OshiMessageCard(exam: exam),
+          const SizedBox(height: 8),
           const DailyMissionCard(),
           const StudyReminderCard(),
+          const SizedBox(height: 8),
+          WeeklyRecapSection(exam: exam, questions: questions),
+          const SizedBox(height: 8),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.edit_note_outlined),
+              title: const Text('間違いノート'),
+              subtitle: const Text('間違えた問題を見返して、解き直せます。'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => openMistakeNote(context, exam: exam, questions: questions),
+            ),
+          ),
           const SizedBox(height: 8),
           PremiumPracticeCards(exam: exam, questions: questions),
           const SizedBox(height: 8),

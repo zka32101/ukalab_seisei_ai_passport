@@ -8,12 +8,13 @@ import 'package:ukalab_core/cross_promo.dart' show UkalabCrossPromoSection;
 import 'package:ukalab_core/daily_goal.dart' show DailyGoalSetting;
 import 'package:ukalab_core/reminder.dart' show ReminderSettingsSection;
 import 'package:ukalab_core/ui.dart' show DataManagementSection;
-import 'package:ukalab_core/ukalab_core.dart' show Question, historyCsv;
+import 'package:ukalab_core/ukalab_core.dart' show ExamConfig, Question, historyCsv;
 
 import 'package:ukalab_core/exam_date.dart';
 import '../data/data_parts.dart';
 import '../data/history_store.dart';
 import 'exam_prep_entry.dart';
+import 'mistake_note_screen.dart';
 
 /// 「設定」タブ。課金・広告・通知の設定は後続。
 /// インストールされたアプリの版（pubspec の version）。取得できないときは空にして画面は落とさない。
@@ -26,7 +27,10 @@ final appVersionProvider = FutureProvider<String>((ref) async {
 });
 
 class SettingsScreen extends ConsumerWidget {
-  const SettingsScreen({super.key, this.questions = const []});
+  const SettingsScreen({super.key, this.questions = const [], this.exam});
+
+  /// 間違いノートの「解き直す」で演習画面を開くために使う。省略時は間違いノートの入口を出さない。
+  final ExamConfig? exam;
 
   /// 履歴CSVの分野集計で、記録に章が無い旧データを補うために使う。
   final List<Question> questions;
@@ -71,6 +75,14 @@ class SettingsScreen extends ConsumerWidget {
           onTap: () => _copyHistory(context, ref),
         ),
         ExamPrepSettingsEntry(questions: questions),
+        if (exam != null)
+          ListTile(
+            leading: const Icon(Icons.edit_note_outlined),
+            title: const Text('間違いノート'),
+            subtitle: const Text('間違えた問題を見返して、解き直せます。'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => openMistakeNote(context, exam: exam!, questions: questions),
+          ),
         const Divider(height: 32),
         const DailyGoalSetting(),
         const Divider(height: 32),

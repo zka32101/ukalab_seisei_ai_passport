@@ -11,6 +11,9 @@ class HistoryNotifier extends Notifier<List<ProgressRecord>> {
 
   late Future<void> _loaded;
 
+  /// 保存済みの履歴を読み終えたとき。
+  Future<void> get ready => _loaded;
+
   @override
   List<ProgressRecord> build() {
     _loaded = _load();

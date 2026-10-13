@@ -515,11 +515,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.57.0"
-      resolved-ref: "a93f407bc2f1adc6b93dce11d6c4c378aecd92a8"
+      ref: "v0.61.0"
+      resolved-ref: "4b3ea0ab96133e7ff4dfe25857900d3eef648f52"
       url: "https://github.com/zka32101/ukalab_core.git"
     source: git
-    version: "0.57.0"
+    version: "0.61.0"
   url_launcher:
     dependency: "direct main"
     description:
