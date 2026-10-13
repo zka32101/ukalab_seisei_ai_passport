@@ -109,7 +109,8 @@ void main() {
     expect(find.textContaining('公式で要確認'), findsWidgets);
     await tester.tap(find.byType(CheckboxListTile).first);
     await tester.pump();
-    final prefs = await SharedPreferences.getInstance();
+    await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 200)));
+    final prefs = (await tester.runAsync(SharedPreferences.getInstance))!;
     expect(prefs.getStringList('ukalab_seisei_ai_passport_exam_checklist_v1'), hasLength(1));
 
     final part = seiseiDataParts.firstWhere((p) => p.id == 'examChecklist');
