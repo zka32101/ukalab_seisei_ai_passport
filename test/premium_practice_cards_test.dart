@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ukalab_core/answer_feedback.dart' show WeakSummaryCard;
 import 'package:ukalab_core/exam_date.dart';
 import 'package:ukalab_seisei_ai_passport/data/history_store.dart';
 import 'package:ukalab_seisei_ai_passport/screens/learn_screen.dart';
@@ -75,6 +76,16 @@ Future<ProviderContainer> _pump(
 }
 
 void main() {
+  testWidgets('premiumなら今週の弱点カードを出す', (tester) async {
+    await _pump(tester, premium: true, exam: _exam());
+    expect(find.byType(WeakSummaryCard), findsOneWidget);
+  });
+
+  testWidgets('premiumでなければ今週の弱点カードを出さない', (tester) async {
+    await _pump(tester, premium: false, exam: _exam());
+    expect(find.byType(WeakSummaryCard), findsNothing);
+  });
+
   testWidgets('premiumでなければ、案内を出して画面には入らない', (tester) async {
     await _pump(tester, premium: false, exam: _exam());
     await tester.tap(find.text('弱点ドリル'));
