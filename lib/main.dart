@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:io' show Platform;
 
 import 'package:app_common_kit/app_common_kit.dart' hide SettingsScreen;
 import 'package:ukalab_core/achievements.dart'
     show achievementUnlockOverrides, dailyGoalAchievementsOverride, watchAchievementUnlocks;
+import 'package:ukalab_core/cross_promo.dart' show UkalabCrossPromo;
 import 'package:ukalab_core/daily_goal.dart' show dailyGoalOverrides;
 import 'package:ukalab_core/reminder.dart' show reminderOverrides;
 import 'package:ukalab_core/ui.dart';
@@ -27,6 +29,9 @@ bool get _useRevenueCat => !kIsWeb && Platform.isAndroid && _rcGoogleKey.isNotEm
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // 相互紹介（Firebase 初期化 + Remote Config 取得）。失敗しても例外を投げず、起動も止めない。
+  unawaited(UkalabCrossPromo.init());
 
   // 課金。RC_GOOGLE_KEY が渡されたAndroidビルドだけ RevenueCat を使い、それ以外は
   // 仮の購入サービス。価格（仮サービス側）は競合調査を踏まえた暫定値で、運営者確認が必要（決定14）。

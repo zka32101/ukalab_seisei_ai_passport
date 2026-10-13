@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ukalab_core/achievements.dart' show AchievementsView, dailyGoalAchievementCategoryLabels;
+import 'package:ukalab_core/cross_promo.dart' show UkalabCrossPromoSection;
 import 'package:ukalab_core/daily_goal.dart' show DailyGoalSetting;
 import 'package:ukalab_core/reminder.dart' show ReminderSettingsSection;
 import 'package:ukalab_core/ui.dart' show DataManagementSection;
@@ -80,6 +81,10 @@ class SettingsScreen extends ConsumerWidget {
           ),
         ),
         const Divider(height: 32),
+        // 掲載リストが空なら何も表示されない。うかラボは大人向けなので保護者ゲートは不要。
+        const UkalabCrossPromoSection(
+          currentAppId: 'com.yourwish.ukalab.seisei_ai_passport',
+        ),
         const ListTile(
           title: Text('このアプリについて'),
           subtitle: Text(
