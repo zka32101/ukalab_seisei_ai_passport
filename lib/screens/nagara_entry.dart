@@ -8,6 +8,7 @@ import 'package:ukalab_core/ukalab_core.dart';
 import '../data/history_store.dart';
 import '../data/review_schedule.dart';
 import '../data/srs_repository.dart';
+import '../widgets/wrapped_app_bar.dart';
 
 /// ながらセッション1回あたりの上限問数(おつかれさまで区切る)。
 const kNagaraSessionSize = 20;
@@ -95,7 +96,7 @@ class NagaraSessionScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: const Text('ながら学習')),
+      appBar: wrappedAppBar(context, 'ながら学習'),
       body: NagaraSessionView(
         questions: picked,
         maxQuestions: kNagaraSessionSize,

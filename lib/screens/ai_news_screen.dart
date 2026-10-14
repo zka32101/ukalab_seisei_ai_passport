@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../data/ai_news_repository.dart';
 import '../data/exam_repository.dart';
 import 'learn_screen.dart';
+import '../widgets/wrapped_app_bar.dart';
 
 const _syllabusTagNames = {
   'ch1': '1章 AIの基礎と歴史',
@@ -28,7 +29,7 @@ class AiNewsScreen extends ConsumerWidget {
     final examData = ref.watch(examDataProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('今月のAI動向')),
+      appBar: wrappedAppBar(context, '今月のAI動向'),
       body: news.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(
@@ -68,30 +69,35 @@ class AiNewsScreen extends ConsumerWidget {
                               style: Theme.of(context).textTheme.labelMedium,
                             ),
                           ),
-                          if (item.isExamRelevant)
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .errorContainer,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                '試験に出そう',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall
-                                    ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onErrorContainer,
-                                    ),
+                          if (item.isExamRelevant) ...[
+                            const SizedBox(width: 8),
+                            // 狭い幅・大きい文字では「試験に出そう」を折り返して全文を見せる。
+                            Flexible(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .errorContainer,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  '試験に出そう',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onErrorContainer,
+                                      ),
+                                ),
                               ),
                             ),
+                          ],
                         ],
                       ),
                       const SizedBox(height: 4),
@@ -120,7 +126,7 @@ class AiNewsScreen extends ConsumerWidget {
                               onPressed: () => Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (_) => Scaffold(
-                                    appBar: AppBar(title: const Text('関連問題')),
+                                    appBar: wrappedAppBar(context, '関連問題'),
                                     body: LearnScreen(
                                       questions: questions,
                                       priorityQids: [relatedQuestion.qid],

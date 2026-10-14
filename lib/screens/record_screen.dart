@@ -6,6 +6,7 @@ import 'package:ukalab_core/ukalab_core.dart';
 import '../data/exam_repository.dart';
 import '../data/srs_repository.dart';
 import 'learn_screen.dart';
+import '../widgets/wrapped_app_bar.dart';
 
 /// 「記録」タブ: 間隔反復（Leitner方式）で復習時期が来た問題を表示する。
 class RecordScreen extends ConsumerWidget {
@@ -26,9 +27,17 @@ class RecordScreen extends ConsumerWidget {
     }
 
     if (store.items.isEmpty) {
-      return const EmptyState(
-        icon: Icons.insights_outlined,
-        message: '学習の記録はこれから。「学ぶ」タブで演習を進めると、ここに復習の予定が表示されます。',
+      // 大きい文字・狭い幅では案内文が画面より縦に長くなるため、スクロールできるようにする。
+      return LayoutBuilder(
+        builder: (context, constraints) => SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: const EmptyState(
+              icon: Icons.insights_outlined,
+              message: '学習の記録はこれから。「学ぶ」タブで演習を進めると、ここに復習の予定が表示されます。',
+            ),
+          ),
+        ),
       );
     }
 
@@ -69,7 +78,7 @@ class RecordScreen extends ConsumerWidget {
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => Scaffold(
-                    appBar: AppBar(title: const Text('復習')),
+                    appBar: wrappedAppBar(context, '復習'),
                     body: LearnScreen(
                       questions: questions,
                       priorityQids: [for (final q in dueQuestions) q.qid],
@@ -93,7 +102,7 @@ class RecordScreen extends ConsumerWidget {
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => Scaffold(
-                      appBar: AppBar(title: Text('復習: ${s.name}')),
+                      appBar: wrappedAppBar(context, '復習: ${s.name}'),
                       body: LearnScreen(
                         questions: questions,
                         priorityQids: _subjectReviewQids(questions, store, s.subjectId),
@@ -109,9 +118,13 @@ class RecordScreen extends ConsumerWidget {
                       Expanded(
                         child: Text(s.name, style: Theme.of(context).textTheme.bodyMedium),
                       ),
-                      Text(
-                        '${(s.accuracy * 100).round()}%（${s.correct}/${s.total}問）',
-                        style: Theme.of(context).textTheme.bodyMedium,
+                      // 分野名が長い・文字が大きいときも右端が切れないよう、成績側も折り返せるようにする。
+                      Flexible(
+                        child: Text(
+                          '${(s.accuracy * 100).round()}%（${s.correct}/${s.total}問）',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          textAlign: TextAlign.end,
+                        ),
                       ),
                       const SizedBox(width: 4),
                       const Icon(Icons.chevron_right, size: 20),

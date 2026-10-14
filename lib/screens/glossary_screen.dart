@@ -5,6 +5,7 @@ import 'package:ukalab_core/glossary.dart';
 
 import '../data/exam_repository.dart';
 import '../data/term_repository.dart';
+import '../widgets/wrapped_app_bar.dart';
 
 /// 「用語集」。検索・分野での絞り込み・「覚えた」チェックは core の [GlossaryListView]。
 class GlossaryScreen extends ConsumerStatefulWidget {
@@ -22,7 +23,7 @@ class _GlossaryScreenState extends ConsumerState<GlossaryScreen> {
     final terms = ref.watch(termsProvider);
     final exam = ref.watch(examDataProvider).valueOrNull?.exam;
     return Scaffold(
-      appBar: AppBar(title: const Text('用語集')),
+      appBar: wrappedAppBar(context, '用語集'),
       body: terms.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => ErrorState(message: '読み込みに失敗しました: $e'),

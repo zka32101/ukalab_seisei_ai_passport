@@ -9,6 +9,7 @@ import '../data/exam_repository.dart';
 import '../data/reading_repository.dart';
 import '../data/term_repository.dart';
 import 'learn_screen.dart';
+import '../widgets/wrapped_app_bar.dart';
 
 /// 章ごとの解説読み物（教科書的なまとめページ）の一覧。
 class ReadingScreen extends ConsumerWidget {
@@ -27,7 +28,7 @@ class ReadingScreen extends ConsumerWidget {
     final examData = ref.watch(examDataProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('章ごとの解説読み物')),
+      appBar: wrappedAppBar(context, '章ごとの解説読み物'),
       body: readings.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(
@@ -65,7 +66,7 @@ class ReadingScreen extends ConsumerWidget {
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(
                       builder: (context) => Scaffold(
-                        appBar: AppBar(title: Text(r.title)),
+                        appBar: wrappedAppBar(context, r.title),
                         body: ChapterReadingWidget(
                           title: r.title,
                           sections: [
@@ -109,7 +110,7 @@ class ReadingScreen extends ConsumerWidget {
                             Navigator.of(context).push(
                               MaterialPageRoute<void>(
                                 builder: (context) => Scaffold(
-                                  appBar: AppBar(title: const Text('関連問題')),
+                                  appBar: wrappedAppBar(context, '関連問題'),
                                   body: LearnScreen(
                                     questions: questions,
                                     priorityQids: [qid],

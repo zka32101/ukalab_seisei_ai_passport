@@ -6,6 +6,7 @@ import 'package:ukalab_core/ui.dart';
 import '../data/exam_repository.dart';
 import '../data/term_repository.dart';
 import 'learn_screen.dart';
+import '../widgets/wrapped_app_bar.dart';
 
 /// 時代区分IDの表示順（先頭が古い時代）。`content/exam/README.md`の
 /// 「用語マップ・AI系譜図向け時代区分」に合わせたアプリ側（UI層）の定義。
@@ -29,7 +30,7 @@ class TermMapScreen extends ConsumerWidget {
     final examData = ref.watch(examDataProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('用語マップ')),
+      appBar: wrappedAppBar(context, '用語マップ'),
       body: terms.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(
@@ -78,7 +79,7 @@ class TermMapScreen extends ConsumerWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => Scaffold(
-                      appBar: AppBar(title: const Text('関連問題')),
+                      appBar: wrappedAppBar(context, '関連問題'),
                       body: LearnScreen(
                         questions: questions,
                         priorityQids: [qid],

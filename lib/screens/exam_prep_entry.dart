@@ -8,6 +8,7 @@ import 'package:ukalab_core/ukalab_core.dart';
 import '../data/core_features.dart';
 import '../data/history_store.dart';
 import 'learn_screen.dart';
+import '../widgets/wrapped_app_bar.dart';
 
 /// ukalab_core の共通画面（`lib/ui/exam_prep/`）をこのアプリのデータにつなぐ部分。
 /// 画面・文言は core 側。ここは取得・保存・premium 判定・遷移だけ。
@@ -24,7 +25,7 @@ void _openPractice(BuildContext context, String title, List<Question> pool, Stri
   }
   Navigator.of(context).push(MaterialPageRoute<void>(
     builder: (_) => Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: wrappedAppBar(context, title),
       body: LearnScreen(questions: pool, sessionSize: pool.length),
     ),
   ));
@@ -68,7 +69,7 @@ class ExamDateSettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: const Text('試験日の設定')),
+      appBar: wrappedAppBar(context, '試験日の設定'),
       body: ListView(children: [
         ExamDateTile(
           date: ref.watch(examDateProvider),

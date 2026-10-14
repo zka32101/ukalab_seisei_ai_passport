@@ -100,8 +100,9 @@ class _MockExamScreenState extends ConsumerState<MockExamScreen> {
     final level = widget.exam.levels.first;
 
     if (!_started) {
+      // 大きい文字・狭い幅でも下が切れないよう、縦にスクロールできるようにする。
       return Center(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisSize: MainAxisSize.min,

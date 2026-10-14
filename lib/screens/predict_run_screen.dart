@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ukalab_core/ukalab_core.dart';
 
 import '../data/predict_run_repository.dart';
+import '../widgets/wrapped_app_bar.dart';
 
 /// 「温度の実験室」（予測→実行、型②、決定76）。先に答えを予測してから、
 /// 計算結果とのズレを見て学ぶ。
@@ -22,7 +23,7 @@ class _PredictRunScreenState extends ConsumerState<PredictRunScreen> {
   Widget build(BuildContext context) {
     final scenarios = ref.watch(predictRunScenariosProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('温度の実験室')),
+      appBar: wrappedAppBar(context, '温度の実験室'),
       body: scenarios.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/misconception_repository.dart';
+import '../widgets/wrapped_app_bar.dart';
 
 /// 「推しの答案を添削」体験（型③、決定76・77）。推しがよくある誤りを含む
 /// 答案を出し、正しい選択肢に差し替えると理解する演出。推しの成長（Lv）とは
@@ -22,7 +23,7 @@ class _TeachMascotScreenState extends ConsumerState<TeachMascotScreen> {
   Widget build(BuildContext context) {
     final scenarios = ref.watch(misconceptionScenariosProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('推しの答案を添削')),
+      appBar: wrappedAppBar(context, '推しの答案を添削'),
       body: scenarios.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(

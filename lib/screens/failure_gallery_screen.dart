@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/failure_gallery_repository.dart';
+import '../widgets/wrapped_app_bar.dart';
 
 /// 「学習の失敗図鑑」体験（型⑦、決定76）。学習曲線（訓練・検証誤差）を見て
 /// 症状（過学習・未学習など）を当て、正解すると処方（対策）を選ぶ。
@@ -22,7 +23,7 @@ class _FailureGalleryScreenState extends ConsumerState<FailureGalleryScreen> {
   Widget build(BuildContext context) {
     final cases = ref.watch(failureCasesProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('学習の失敗図鑑')),
+      appBar: wrappedAppBar(context, '学習の失敗図鑑'),
       body: cases.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(

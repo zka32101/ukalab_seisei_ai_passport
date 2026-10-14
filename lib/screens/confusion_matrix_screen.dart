@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/confusion_matrix_repository.dart';
+import '../widgets/wrapped_app_bar.dart';
 
 /// 「評価指標ラボ」体験（画期的な機能3）。混同行列（TP/FP/FN/TN）を動かして
 /// 正解率・適合率・再現率・F値の連動を見たあと、偽陽性・偽陰性のどちらを
@@ -24,7 +25,7 @@ class _ConfusionMatrixScreenState
   Widget build(BuildContext context) {
     final scenarios = ref.watch(confusionMatrixScenariosProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('評価指標ラボ')),
+      appBar: wrappedAppBar(context, '評価指標ラボ'),
       body: scenarios.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(
