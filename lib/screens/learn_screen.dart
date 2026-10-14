@@ -7,6 +7,7 @@ import 'package:ukalab_core/daily_goal.dart' show recordDailyAnswer;
 import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_core/ukalab_core.dart';
 
+import '../data/coin_grants.dart';
 import '../data/history_store.dart';
 import '../data/review_schedule.dart';
 import '../data/srs_repository.dart';
@@ -86,6 +87,7 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
         );
     // 今日の復習の対象なら、結果を復習日程に反映する(履歴と同じ時刻)。
     recordReviewResult(q.qid, correct: i == q.answerIndex, at: at);
+    grantAnswerCoins(ref, q.qid, ref.read(historyProvider));
   }
 
   void _next() {

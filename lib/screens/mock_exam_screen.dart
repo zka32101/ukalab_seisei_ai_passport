@@ -7,6 +7,8 @@ import 'package:ukalab_core/mock_exam_history.dart';
 import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_core/ukalab_core.dart';
 
+import '../data/coin_grants.dart';
+import '../data/history_store.dart';
 import '../data/srs_repository.dart';
 
 /// 「模擬」タブ: 本試験相当の採点（合格ラインの目安は非公開のため70%を目安と明記）。
@@ -79,9 +81,33 @@ class _MockExamScreenState extends ConsumerState<MockExamScreen> {
     final rule = widget.exam.levels.first.passRule;
     final result = scoreMockExam(questions: _picked, answers: _answers, rule: rule);
     setState(() => _result = result);
+    grantCoin(ref, CoinEvent.mockDone());
+    if (result.passed) {
+      grantCoin(ref, CoinEvent.mockPass(widget.exam.examId));
+      _markReadyIfMastered();
+    }
     if (_isPremium(ref)) {
       await ref.read(mockExamHistoryProvider.notifier).record(result);
     }
+  }
+
+  /// 模擬に合格し、かつ習得度が十分なら「準備完了」の衣装を解放する（失敗しても止めない）。
+  void _markReadyIfMastered() {
+    try {
+      final latest = <String, bool>{};
+      for (final r in ref.read(historyProvider).reversed) {
+        latest[r.qid] = r.correct;
+      }
+      final total = widget.questions.length;
+      if (total == 0 || latest.isEmpty) return;
+      final mastery = MasteryInput(
+        coverage: (latest.length / total).clamp(0.0, 1.0),
+        accuracy: latest.values.where((c) => c).length / latest.length,
+      );
+      if (ReadinessRule.standard.isReady(mastery: mastery, mockPassed: true)) {
+        ref.read(outfitProvider.notifier).markReady(UkalabCert.genAiPassport).catchError((_) => false);
+      }
+    } catch (_) {}
   }
 
   void _next() {

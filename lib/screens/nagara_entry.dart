@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ukalab_core/daily_goal.dart' show recordDailyAnswer;
 import 'package:ukalab_core/ukalab_core.dart';
 
+import '../data/coin_grants.dart';
 import '../data/history_store.dart';
 import '../data/review_schedule.dart';
 import '../data/srs_repository.dart';
@@ -91,6 +92,7 @@ class NagaraSessionScreen extends ConsumerWidget {
     final at = DateTime.now();
     ref.read(historyProvider.notifier).record(q, correct: correct, at: at);
     recordReviewResult(q.qid, correct: correct, at: at);
+    grantAnswerCoins(ref, q.qid, ref.read(historyProvider));
   }
 
   @override
