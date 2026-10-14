@@ -79,6 +79,8 @@ Future<void> main() async {
   );
   await container.read(handsFreeProvider.notifier).load();
   await container.read(examDateProvider.notifier).load();
+  // 文字の大きさ（アプリ内設定）を復元する
+  await loadSavedTextScale();
 
   runApp(
     UncontrolledProviderScope(
@@ -99,6 +101,8 @@ class UkalabSeiseiAiPassportApp extends ConsumerWidget {
     watchAchievementUnlocks(ref, scaffoldMessengerKey);
     return MaterialApp(
       scaffoldMessengerKey: scaffoldMessengerKey,
+      // 文字の大きさ（設定画面で選ぶ）を端末の文字サイズに掛け合わせる。
+      builder: applyAppTextScale,
       title: 'うかラボ 生成AIパスポート',
       debugShowCheckedModeBanner: false,
       theme: UkalabTheme.light(
