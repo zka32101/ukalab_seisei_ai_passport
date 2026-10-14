@@ -14,6 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:ukalab_core/exam_date.dart';
 import 'package:ukalab_core/mock_exam_history.dart';
+import 'data/coin_grants.dart';
 import 'data/exam_repository.dart';
 import 'screens/home_screen.dart';
 import 'screens/learn_screen.dart';
@@ -64,6 +65,7 @@ Future<void> main() async {
   final reminder = await reminderOverrides('seisei_ai_passport');
   final achievementUnlock = await achievementUnlockOverrides('seisei_ai_passport');
   final mockExamHistory = await mockExamHistoryOverrides('seisei_ai_passport');
+  final coinOutfit = await coinOutfitOverrides(kCoinAppKey);
   final container = ProviderContainer(
     overrides: [
       ...studyNotes,
@@ -71,6 +73,7 @@ Future<void> main() async {
       ...reminder,
       ...achievementUnlock,
       ...mockExamHistory,
+      ...coinOutfit,
       dailyGoalAchievementsOverride,
       entitlementServiceProvider.overrideWithValue(entitlementService),
       handsFreeStoreProvider.overrideWithValue(SharedPreferencesHandsFreeStore('seisei_ai_passport')),
