@@ -16,6 +16,7 @@ import 'package:ukalab_core/ukalab_core.dart';
 import 'package:ukalab_seisei_ai_passport/data/core_features.dart';
 import 'package:ukalab_seisei_ai_passport/data/oshi_recap.dart';
 import 'package:ukalab_seisei_ai_passport/data/review_schedule.dart';
+import 'package:ukalab_seisei_ai_passport/screens/core_v069_cards.dart' show OshiGrowthHomeCard;
 import 'package:ukalab_seisei_ai_passport/screens/home_screen.dart';
 import 'package:ukalab_seisei_ai_passport/screens/mistake_note_screen.dart';
 
@@ -111,12 +112,13 @@ void main() {
   DateTime daysAgo(int n) =>
       DateTime(today.year, today.month, today.day - n, 9);
 
-  testWidgets('ホームに今日の復習・結果分析・推しの成長が出る（履歴なし）', (tester) async {
+  testWidgets('ホームに今日の復習・結果分析が出て、成長の吹き出しは出ない（履歴なし）', (tester) async {
     await _pump(tester);
     expect(find.byType(TodayReviewCard), findsOneWidget);
     expect(_dueShown(tester), 0);
     expect(find.byType(MockExamAnalysisCard), findsOneWidget);
-    expect(find.byType(OshiGrowthBubble), findsOneWidget);
+    expect(find.byType(OshiGrowthHomeCard), findsOneWidget); // 祝福の見張り役は残す
+    expect(find.byType(OshiGrowthBubble, skipOffstage: false), findsNothing);
     // 履歴が無ければ祝福は出ない。
     expect(find.byType(OshiGrowthCelebrationCard), findsNothing);
     expect(tester.takeException(), isNull);
@@ -207,7 +209,7 @@ void main() {
       find.byType(MockExamAnalysisCard, skipOffstage: false),
       findsOneWidget,
     );
-    expect(find.byType(OshiGrowthBubble, skipOffstage: false), findsOneWidget);
+    expect(find.byType(OshiGrowthBubble, skipOffstage: false), findsNothing);
   });
 
   group('recordReviewResult', () {

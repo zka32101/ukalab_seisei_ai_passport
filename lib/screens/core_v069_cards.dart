@@ -104,8 +104,8 @@ class MockExamAnalysisHomeCard extends ConsumerWidget {
   }
 }
 
-/// ホーム「記録」の推しの成長演出。累計の回答数・学習日数で推しの反応が変わり、
-/// 節目(10/50/100問・7/30日など)に着いたら一度だけ祝う。
+/// ホーム「記録」に置く、推しの成長演出の見張り役。吹き出し(OshiGrowthBubble)はホームに出さない
+/// (常時表示は「推しの一言」だけ)。節目(10/50/100問・7/30日など)に着いたら一度だけ祝う。
 ///
 /// 祝福はこのタブが見えているときだけ(ほかのタブで解いている最中に出さない)。
 /// 久しぶりに開いて複数の節目を迎えても、祝福は最も大きい1件だけ。
@@ -152,7 +152,9 @@ class _OshiGrowthHomeCardState extends ConsumerState<OshiGrowthHomeCard> {
   }
 
   @override
-  Widget build(BuildContext context) => OshiGrowthBubble(
-    progress: oshiGrowthProgressFor(ref.watch(historyProvider)),
-  );
+  Widget build(BuildContext context) {
+    // 表示はしないが、解答履歴の変化を購読して節目の判定を続ける(祝福の発火経路を従来どおり保つ)。
+    ref.watch(historyProvider);
+    return const SizedBox.shrink();
+  }
 }
