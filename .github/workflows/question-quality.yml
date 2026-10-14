@@ -1,0 +1,17 @@
+name: Question quality
+
+# ukalab_core の再利用可能ワークフローを呼ぶだけ（警告のみ。strict は付けない）。
+on:
+  pull_request:
+    paths:
+      - 'content/exam/questions.jsonl'
+      - '.github/workflows/question-quality.yml'
+
+jobs:
+  question-quality:
+    uses: zka32101/ukalab_core/.github/workflows/question-quality.yml@main
+    with:
+      files: 'content/exam/questions.jsonl'
+      choices_key: choices
+      answer_key: answerIndex
+      category_key: subjectId
