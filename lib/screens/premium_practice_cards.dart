@@ -6,6 +6,7 @@ import 'package:ukalab_core/ukalab_core.dart';
 import 'package:ukalab_core/answer_feedback.dart' show WeakSummaryCard, canShowWeakSummary;
 import '../data/history_store.dart';
 import 'learn_screen.dart';
+import '../widgets/wrapped_app_bar.dart';
 
 /// ホームに出す、プレミアム機能の入口（弱点ドリル。試験直前モードは ExamPrepEntryCard）。
 ///
@@ -39,7 +40,7 @@ class PremiumPracticeCards extends ConsumerWidget {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => Scaffold(
-          appBar: AppBar(title: Text(title)),
+          appBar: wrappedAppBar(context, title),
           body: LearnScreen(questions: drill, sessionSize: drill.length),
         ),
       ),

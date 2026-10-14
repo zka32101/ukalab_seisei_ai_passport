@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/boundary_repository.dart';
+import '../widgets/wrapped_app_bar.dart';
 
 /// 「境界線スライダー」体験（型①、決定76・77）。条件を1つずつ切り替え、
 /// 判定が切り替わる境目を体験する。判定は参考用の「目安」で法的助言ではない。
@@ -21,7 +22,7 @@ class _BoundaryScreenState extends ConsumerState<BoundaryScreen> {
   Widget build(BuildContext context) {
     final scenarios = ref.watch(boundaryScenariosProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('境界線スライダー')),
+      appBar: wrappedAppBar(context, '境界線スライダー'),
       body: scenarios.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(

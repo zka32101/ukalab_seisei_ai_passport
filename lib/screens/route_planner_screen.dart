@@ -7,6 +7,7 @@ import 'package:ukalab_core/ukalab_core.dart';
 import '../data/exam_repository.dart';
 import '../data/srs_repository.dart';
 import 'learn_screen.dart';
+import '../widgets/wrapped_app_bar.dart';
 
 /// 「今日やる3つ」（最短ルートプランナー、型④、決定76・77）。残り日数・弱点・
 /// 配点から、今日取り組むべき科目を3つ提案する。足切り未達の科目は最優先。
@@ -20,7 +21,7 @@ class RoutePlannerScreen extends ConsumerWidget {
 
     if (examData.hasError || srs.hasError) {
       return Scaffold(
-        appBar: AppBar(title: const Text('今日やる3つ')),
+        appBar: wrappedAppBar(context, '今日やる3つ'),
         body: const EmptyState(message: '読み込めませんでした。'),
       );
     }
@@ -28,7 +29,7 @@ class RoutePlannerScreen extends ConsumerWidget {
     final store = srs.valueOrNull;
     if (data == null || store == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('今日やる3つ')),
+        appBar: wrappedAppBar(context, '今日やる3つ'),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
@@ -53,8 +54,9 @@ class RoutePlannerScreen extends ConsumerWidget {
     };
 
     return Scaffold(
-      appBar: AppBar(title: const Text('今日やる3つ')),
-      body: Padding(
+      appBar: wrappedAppBar(context, '今日やる3つ'),
+      // 大きい文字・狭い幅でも下が切れないよう、縦にスクロールできるようにする。
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: RoutePlannerWidget(
           tasks: [
@@ -72,9 +74,7 @@ class RoutePlannerScreen extends ConsumerWidget {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (_) => Scaffold(
-                  appBar: AppBar(
-                    title: Text(subjectNames[subjectId] ?? subjectId),
-                  ),
+                  appBar: wrappedAppBar(context, subjectNames[subjectId] ?? subjectId),
                   body: LearnScreen(questions: subjectQuestions),
                 ),
               ),
