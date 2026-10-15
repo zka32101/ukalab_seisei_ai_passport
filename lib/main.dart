@@ -15,6 +15,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ukalab_core/exam_date.dart';
 import 'package:ukalab_core/mock_exam_history.dart';
 import 'data/coin_grants.dart';
+import 'launch_splash.dart';
 import 'data/exam_repository.dart';
 import 'screens/home_screen.dart';
 import 'screens/learn_screen.dart';
@@ -128,7 +129,7 @@ class _RootPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final examData = ref.watch(examDataProvider);
     return examData.when(
-      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
+      loading: () => const LaunchSplash(),
       error: (e, st) => Scaffold(
         body: ErrorState(
           message: '問題データを読み込めませんでした。\n$e',
