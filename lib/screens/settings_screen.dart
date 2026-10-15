@@ -13,6 +13,8 @@ import 'package:ukalab_core/ukalab_core.dart' show ExamConfig, Question, history
 import 'package:ukalab_core/exam_date.dart';
 import '../data/data_parts.dart';
 import '../data/history_store.dart';
+import '../data/peer_stats_prep.dart';
+import '../widgets/peer_stats_settings_tile.dart';
 import 'exam_prep_entry.dart';
 import 'mistake_note_screen.dart';
 
@@ -94,6 +96,9 @@ class SettingsScreen extends ConsumerWidget {
           date: ref.watch(examDateProvider),
           onChanged: (d) => ref.read(examDateProvider.notifier).setDate(d),
         ),
+        // 送信側が未実装の間は出さない（kPeerStatsSettingsVisible = false）。
+        if (kPeerStatsSettingsVisible)
+          PeerStatsSettingsTile(settings: ref.watch(peerStatsSettingsProvider)),
         ListTile(
           title: const Text('学習履歴をコピー（CSV）'),
           subtitle: const Text('日ごと・分野ごとの解答数と正答率。個人情報は含みません。'),
