@@ -8,6 +8,12 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Firebase（相互紹介の Remote Config）。google-services.json は秘密扱いでコミットしないため、
+// 無い環境（CI など）ではプラグインを適用せず、Firebase 未設定のままビルドできるようにする。
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+}
+
 // リリース署名鍵。ローカルは android/key.properties（gitignore対象）、
 // CIは環境変数（GitHub Actions Secrets）から読む。どちらも無ければdebug鍵のまま。
 val keystorePropertiesFile = rootProject.file("key.properties")
