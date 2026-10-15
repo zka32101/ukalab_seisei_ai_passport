@@ -167,7 +167,16 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('うかラボ 生成AIパスポート', style: theme.textTheme.titleLarge),
+                    // 資格小物(CertPropBadge)で幅が狭まっても途中で折り返さないよう、1行で縮小して収める。
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'うかラボ 生成AIパスポート',
+                        softWrap: false,
+                        style: theme.textTheme.titleLarge,
+                      ),
+                    ),
                     const SizedBox(height: 4),
                     Text(
                       '生成AIパスポート試験対策（GUGA・一般社団法人生成AI活用普及協会とは無関係の非公式アプリ）',
