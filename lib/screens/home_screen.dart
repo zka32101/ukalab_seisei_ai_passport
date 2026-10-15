@@ -5,6 +5,7 @@ import 'package:ukalab_core/reminder.dart' show StudyReminderCard;
 import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_core/ukalab_core.dart';
 
+import '../widgets/cert_prop_badge.dart';
 import 'ai_news_screen.dart';
 import 'boundary_screen.dart';
 import 'core_v069_cards.dart';
@@ -159,11 +160,25 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('うかラボ 生成AIパスポート', style: theme.textTheme.titleLarge),
-          const SizedBox(height: 4),
-          Text(
-            '生成AIパスポート試験対策（GUGA・一般社団法人生成AI活用普及協会とは無関係の非公式アプリ）',
-            style: theme.textTheme.bodySmall,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('うかラボ 生成AIパスポート', style: theme.textTheme.titleLarge),
+                    const SizedBox(height: 4),
+                    Text(
+                      '生成AIパスポート試験対策（GUGA・一般社団法人生成AI活用普及協会とは無関係の非公式アプリ）',
+                      style: theme.textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              const CertPropBadge(),
+            ],
           ),
           const SizedBox(height: 16),
           OshiCard(exam: exam, totalQuestions: questionCount),
