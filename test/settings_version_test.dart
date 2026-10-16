@@ -10,6 +10,7 @@ import 'package:ukalab_core/daily_goal.dart' show dailyGoalOverrides;
 import 'package:ukalab_core/reminder.dart' show reminderOverrides;
 import 'package:ukalab_core/ui.dart' show studyNotesOverrides;
 import 'package:ukalab_seisei_ai_passport/screens/settings_screen.dart';
+import 'package:ukalab_seisei_ai_passport/unofficial_notice.dart';
 
 void main() {
   setUp(() {
@@ -44,5 +45,40 @@ void main() {
 
     expect(find.text('9.8.7'), findsOneWidget);
     expect(find.text('0.1.0'), findsNothing);
+  });
+
+  testWidgets('設定「このアプリについて」に非公式・商標の表示があり、320dp/文字2.0倍でも溢れない', (tester) async {
+    PackageInfo.setMockInitialValues(
+      appName: 'test', packageName: 'com.example.test', version: '1.0.0', buildNumber: '1', buildSignature: '');
+    tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          entitlementServiceProvider.overrideWithValue(FakeEntitlementService()),
+          handsFreeStoreProvider.overrideWithValue(InMemoryHandsFreeStore()),
+          ...(await tester.runAsync(() => studyNotesOverrides('test')))!,
+          ...(await tester.runAsync(() => dailyGoalOverrides('test')))!,
+          ...(await tester.runAsync(() => reminderOverrides('test')))!,
+          ...(await tester.runAsync(() => achievementUnlockOverrides('test')))!,
+          dailyGoalAchievementsOverride,
+        ],
+        child: MaterialApp(
+          builder: (c, w) => MediaQuery(
+            data: MediaQuery.of(c).copyWith(textScaler: const TextScaler.linear(2.0)),
+            child: w!,
+          ),
+          home: const Scaffold(body: SettingsScreen()),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.scrollUntilVisible(find.byKey(const Key('aboutAppTile')), 400,
+        scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+    expect(find.textContaining('非公式アプリです'), findsOneWidget);
+    expect(find.textContaining(kTrademarkNotice), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 }

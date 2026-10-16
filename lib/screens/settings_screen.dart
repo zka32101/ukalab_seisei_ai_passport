@@ -5,6 +5,8 @@ import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ukalab_core/achievements.dart' show AchievementsView, dailyGoalAchievementCategoryLabels;
 import 'package:ukalab_core/cross_promo.dart' show UkalabCrossPromoSection;
+
+import '../unofficial_notice.dart';
 import 'package:ukalab_core/daily_goal.dart' show DailyGoalSetting;
 import 'package:ukalab_core/reminder.dart' show ReminderSettingsSection;
 import 'package:ukalab_core/ui.dart' show DataManagementSection;
@@ -140,11 +142,9 @@ class SettingsScreen extends ConsumerWidget {
           currentAppId: 'com.yourwish.ukalab.seisei_ai_passport',
         ),
         const ListTile(
+          key: Key('aboutAppTile'),
           title: Text('このアプリについて'),
-          subtitle: Text(
-            '「うかラボ 生成AIパスポート」は、GUGA（一般社団法人生成AI活用普及協会）とは'
-            '無関係に開発・運営する非公式の学習アプリです。問題はすべて独自に作成しています。',
-          ),
+          subtitle: Text('$kUnofficialNotice\n$kTrademarkNotice\n$kOriginalQuestionsNotice'),
         ),
         const Divider(height: 1),
         ListTile(
