@@ -91,6 +91,7 @@ class _MockExamScreenState extends ConsumerState<MockExamScreen> {
     if (_isPremium(ref)) {
       await ref.read(mockExamHistoryProvider.notifier).record(result);
     }
+    await ref.read(adGateProvider).maybeShowInterstitial(InterstitialTrigger.mockExamResult);
   }
 
   /// 模擬に合格し、かつ習得度が十分なら「準備完了」の衣装を解放する（失敗しても止めない）。
@@ -179,6 +180,8 @@ class _MockExamScreenState extends ConsumerState<MockExamScreen> {
                 passRatio: 0.70,
                 onRetry: _start,
               ),
+              const SizedBox(height: 16),
+              ref.watch(adGateProvider).banner(BannerPlacement.result),
               const SizedBox(height: 16),
               // この模擬試験の分野別の様子(科目ごと)。点数では責めず、次に少しだけやる分野を出す。
               MockExamAnalysisCard(

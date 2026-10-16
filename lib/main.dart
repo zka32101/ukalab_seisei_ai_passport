@@ -8,12 +8,13 @@ import 'package:ukalab_core/cross_promo.dart' show UkalabCrossPromo;
 import 'package:ukalab_core/daily_goal.dart' show dailyGoalOverrides;
 import 'package:ukalab_core/reminder.dart' show reminderOverrides;
 import 'package:ukalab_core/ui.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb, kReleaseMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:ukalab_core/exam_date.dart';
 import 'package:ukalab_core/mock_exam_history.dart';
+import 'data/ad_unit_ids.dart';
 import 'data/coin_grants.dart';
 import 'launch_splash.dart';
 import 'data/exam_repository.dart';
@@ -23,6 +24,7 @@ import 'screens/learn_screen.dart';
 import 'screens/mock_exam_screen.dart';
 import 'screens/record_screen.dart';
 import 'screens/settings_screen.dart';
+import 'services/no_ads_backend.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,6 +63,21 @@ Future<void> main() async {
     },
   );
 
+  // 広告。本番ユニットIDはビルド時に --dart-define で渡す（ad_unit_ids.dart）。
+  // Web・iOS は広告を出さない。リリースで未指定なら空のIDで、広告なしのまま起動する。
+  final adGate = await AdGate.init(
+    config: AdConfig(
+      unitIds: adUnitIdsFor(
+        isWeb: kIsWeb,
+        isAndroid: !kIsWeb && Platform.isAndroid,
+        isRelease: kReleaseMode,
+      ),
+    ),
+    backend: (kIsWeb || !Platform.isAndroid) ? NoAdsBackend() : null,
+    adsHidden: () => entitlementService.state.adsHidden,
+    isRelease: kReleaseMode,
+  );
+
   final studyNotes = await studyNotesOverrides('seisei_ai_passport');
   final dailyGoal = await dailyGoalOverrides('seisei_ai_passport');
   final reminder = await reminderOverrides('seisei_ai_passport');
@@ -77,6 +94,7 @@ Future<void> main() async {
       ...coinOutfit,
       dailyGoalAchievementsOverride,
       entitlementServiceProvider.overrideWithValue(entitlementService),
+      adGateProvider.overrideWithValue(adGate),
       handsFreeStoreProvider.overrideWithValue(SharedPreferencesHandsFreeStore('seisei_ai_passport')),
       examDateStoreProvider.overrideWithValue(ExamDateStore('seisei_ai_passport')),
     ],

@@ -25,7 +25,13 @@ jobs:
           storeFile=/tmp/upload-keystore.jks
           EOF
       - run: flutter pub get
-      - run: flutter build appbundle --release
+      - name: AABをビルド（広告ユニットID・RevenueCatキーはSecretsから注入）
+        run: >
+          flutter build appbundle --release
+          --dart-define=RC_GOOGLE_KEY=${{ secrets.RC_GOOGLE_KEY }}
+          --dart-define=AD_BANNER_ID=${{ secrets.AD_BANNER_ID }}
+          --dart-define=AD_INTERSTITIAL_ID=${{ secrets.AD_INTERSTITIAL_ID }}
+          --dart-define=AD_REWARDED_ID=${{ secrets.AD_REWARDED_ID }}
       - uses: actions/upload-artifact@v4
         with:
           name: app-release-aab

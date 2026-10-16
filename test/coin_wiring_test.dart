@@ -15,6 +15,7 @@ import 'package:ukalab_seisei_ai_passport/data/history_store.dart';
 import 'package:ukalab_seisei_ai_passport/screens/home_screen.dart';
 import 'package:ukalab_seisei_ai_passport/screens/learn_screen.dart';
 import 'package:ukalab_seisei_ai_passport/screens/mock_exam_screen.dart';
+import 'test_ads.dart';
 
 Question _q(String qid) => Question(
       qid: qid,
@@ -42,6 +43,7 @@ Future<ProviderContainer> _pump(WidgetTester tester, Widget home, {bool withCoin
     if (withCoin) coinServiceProvider.overrideWithValue(_coins),
     if (withCoin) outfitServiceProvider.overrideWithValue(outfit),
     entitlementServiceProvider.overrideWithValue(FakeEntitlementService()),
+    stubAdGateOverride(),
     handsFreeStoreProvider.overrideWithValue(InMemoryHandsFreeStore()),
     examDateStoreProvider.overrideWithValue(ExamDateStore('test')),
     ...(await tester.runAsync(() => studyNotesOverrides('test')))!,

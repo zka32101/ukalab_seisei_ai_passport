@@ -19,6 +19,7 @@ import 'package:ukalab_seisei_ai_passport/data/review_schedule.dart';
 import 'package:ukalab_seisei_ai_passport/screens/core_v069_cards.dart' show OshiGrowthHomeCard;
 import 'package:ukalab_seisei_ai_passport/screens/home_screen.dart';
 import 'package:ukalab_seisei_ai_passport/screens/mistake_note_screen.dart';
+import 'test_ads.dart';
 
 Question _q(String qid) => Question(
   qid: qid,
@@ -71,6 +72,7 @@ Future<void> _pump(
   final container = ProviderContainer(
     overrides: [
       entitlementServiceProvider.overrideWithValue(FakeEntitlementService()),
+      stubAdGateOverride(),
       handsFreeStoreProvider.overrideWithValue(InMemoryHandsFreeStore()),
       ...(await tester.runAsync(() => studyNotesOverrides('test')))!,
       ...(await tester.runAsync(() => dailyGoalOverrides('test')))!,
