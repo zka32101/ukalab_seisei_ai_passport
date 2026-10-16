@@ -2,6 +2,7 @@ import 'package:app_common_kit/app_common_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ukalab_core/ui.dart';
+import 'package:ukalab_core/ukalab_core.dart';
 
 import '../data/exam_repository.dart';
 import '../data/term_repository.dart';
@@ -68,7 +69,7 @@ class TermMapScreen extends ConsumerWidget {
                   if (questionsById[id] != null)
                     RelatedQuestionRef(
                       questionId: id,
-                      label: questionsById[id]!.prompt,
+                      label: questionsById[id]!.displayPrompt,
                     ),
               ],
               onRelatedTermTap: openTerm,

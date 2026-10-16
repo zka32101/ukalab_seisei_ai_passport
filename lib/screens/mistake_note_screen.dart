@@ -75,7 +75,7 @@ class _MistakeNoteScreenState extends ConsumerState<MistakeNoteScreen> {
               celebrateQids: _celebrate,
               topicLabel: topicLabelFor(
                   widget.questions, (id) => widget.exam.subject(id)?.name),
-              questionBuilder: (context, entry) => Text(byQid[entry.qid]!.prompt),
+              questionBuilder: (context, entry) => Text(byQid[entry.qid]!.displayPrompt),
               onRetry: (entry) async {
                 final q = byQid[entry.qid];
                 if (q == null) return;
