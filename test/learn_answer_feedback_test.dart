@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ukalab_core/achievements.dart' show achievementUnlockOverrides, dailyGoalAchievementsOverride;
 import 'package:ukalab_core/daily_goal.dart' show dailyGoalOverrides;
 import 'package:ukalab_core/reminder.dart' show reminderOverrides;
-import 'package:ukalab_core/ui.dart' show ResultSummary, studyNotesOverrides;
+import 'package:ukalab_core/ui.dart' show studyNotesOverrides;
 import 'package:ukalab_core/ukalab_core.dart';
 import 'package:ukalab_seisei_ai_passport/screens/learn_screen.dart';
 
@@ -73,18 +73,18 @@ void main() {
     expect(find.text('解説$cur'), findsNothing);
 
     await _tapAndSettle(tester, '誤りの選択肢');
-    expect(find.text('問題${cur}の文'), findsOneWidget);
+    expect(find.text('問題$curの文'), findsOneWidget);
     expect(find.text('解説$cur'), findsOneWidget);
     expect(find.text('解説$other'), findsNothing);
-    expect(find.text('問題${other}の文'), findsNothing);
+    expect(find.text('問題$otherの文'), findsNothing);
 
     // 解答後〜「次へ」の間に親が再描画されても、表示中の問題は上書きされない。
     _rebuildParent(() {});
     await tester.pumpAndSettle();
-    expect(find.text('問題${cur}の文'), findsOneWidget);
+    expect(find.text('問題$curの文'), findsOneWidget);
     expect(find.text('解説$cur'), findsOneWidget);
     expect(find.text('解説$other'), findsNothing);
-    expect(find.text('問題${other}の文'), findsNothing);
+    expect(find.text('問題$otherの文'), findsNothing);
     expect(find.text('次へ'), findsOneWidget);
   });
 
@@ -99,8 +99,8 @@ void main() {
     expect(find.byType(ResultSummary), findsNothing);
 
     await _tapAndSettle(tester, '次へ');
-    expect(find.text('問題${second}の文'), findsOneWidget);
-    expect(find.text('問題${first}の文'), findsNothing);
+    expect(find.text('問題$secondの文'), findsOneWidget);
+    expect(find.text('問題$firstの文'), findsNothing);
     expect(find.text('解説$first'), findsNothing);
     expect(find.text('解説$second'), findsNothing);
 
