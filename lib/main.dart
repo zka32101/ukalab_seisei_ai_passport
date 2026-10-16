@@ -17,17 +17,12 @@ import 'package:ukalab_core/mock_exam_history.dart';
 import 'data/coin_grants.dart';
 import 'launch_splash.dart';
 import 'data/exam_repository.dart';
+import 'data/revenuecat_key.dart';
 import 'screens/home_screen.dart';
 import 'screens/learn_screen.dart';
 import 'screens/mock_exam_screen.dart';
 import 'screens/record_screen.dart';
 import 'screens/settings_screen.dart';
-
-/// RevenueCat の公開SDKキー（Google Play 用）。ビルド時に
-/// `--dart-define=RC_GOOGLE_KEY=goog_...` で渡す。コミットしない。
-/// 未指定（空）の間は、これまでどおり仮の購入サービス（FakeEntitlementService）で動く。
-const _rcGoogleKey = String.fromEnvironment('RC_GOOGLE_KEY');
-bool get _useRevenueCat => !kIsWeb && Platform.isAndroid && _rcGoogleKey.isNotEmpty;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,11 +30,16 @@ Future<void> main() async {
   // 相互紹介（Firebase 初期化 + Remote Config 取得）。失敗しても例外を投げず、起動も止めない。
   unawaited(UkalabCrossPromo.init());
 
-  // 課金。RC_GOOGLE_KEY が渡されたAndroidビルドだけ RevenueCat を使い、それ以外は
-  // 仮の購入サービス。価格（仮サービス側）は競合調査を踏まえた暫定値で、運営者確認が必要（決定14）。
+  // 課金。RC_GOOGLE_KEY（Android）/ RC_APPLE_KEY（iOS）が渡されたビルドだけ RevenueCat を使い、
+  // それ以外は仮の購入サービス。価格（仮サービス側）は競合調査を踏まえた暫定値で、運営者確認が必要（決定14）。
   // RevenueCat 側は entitlement ID を 'noads' / 'premium'、商品を現行オファリングに登録する。
-  final EntitlementService entitlementService = _useRevenueCat
-      ? await RevenueCatEntitlementService.init(publicSdkKey: _rcGoogleKey)
+  final rcKey = revenueCatKeyFor(
+    isWeb: kIsWeb,
+    isAndroid: !kIsWeb && Platform.isAndroid,
+    isIOS: !kIsWeb && Platform.isIOS,
+  );
+  final EntitlementService entitlementService = rcKey != null
+      ? await RevenueCatEntitlementService.init(publicSdkKey: rcKey)
       : FakeEntitlementService(
     availableOffers: const [
       EntitlementOffer(
