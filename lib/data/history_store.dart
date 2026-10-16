@@ -48,6 +48,14 @@ class HistoryNotifier extends Notifier<List<ProgressRecord>> {
     await prefs.setString(_key, encodeHistory(state));
   }
 
+  /// 直近の [qid] の記録を、自己申告で正解に直して保存する（自由入力の打ち間違い救済）。
+  Future<void> markLatestCorrect(String qid) async {
+    await _loaded;
+    state = markLatestRecordCorrect(state, qid);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_key, encodeHistory(state));
+  }
+
   /// バックアップの読み込み時に呼ぶ。[records] で上書きする。
   Future<void> replace(List<ProgressRecord> records) async {
     await _loaded;
@@ -63,6 +71,27 @@ class HistoryNotifier extends Notifier<List<ProgressRecord>> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_key);
   }
+}
+
+/// 直近の [qid] の不正解の記録を正解に直す（原因ラベルは外す）。無ければそのまま返す。
+List<ProgressRecord> markLatestRecordCorrect(List<ProgressRecord> records, String qid) {
+  for (var i = records.length - 1; i >= 0; i--) {
+    final r = records[i];
+    if (r.qid != qid) continue;
+    if (r.correct) return records;
+    final next = [...records];
+    next[i] = ProgressRecord(
+      qid: r.qid,
+      subjectId: r.subjectId,
+      correct: true,
+      at: r.at,
+      topicId: r.topicId,
+      subtopicId: r.subtopicId,
+      ms: r.ms,
+    );
+    return next;
+  }
+  return records;
 }
 
 final historyProvider =

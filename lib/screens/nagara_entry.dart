@@ -6,6 +6,7 @@ import 'package:ukalab_core/daily_goal.dart' show recordDailyAnswer;
 import 'package:ukalab_core/ukalab_core.dart';
 
 import '../data/coin_grants.dart';
+import '../data/feature_flags.dart';
 import '../data/history_store.dart';
 import '../data/review_schedule.dart';
 import '../data/srs_repository.dart';
@@ -20,6 +21,8 @@ List<NagaraQuestion> pickNagaraQuestions(
   int size = kNagaraSessionSize,
   int? seed,
 }) {
+  // 音声の流れは選択式前提。○×・空欄補充・説明から用語は、フラグに関わらず出さない。
+  pool = withoutNewTypes(pool);
   if (pool.isEmpty) return const [];
   final session = PracticeSession(
     pool: pool,
