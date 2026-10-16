@@ -8,6 +8,7 @@ import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_core/ukalab_core.dart';
 
 import '../data/coin_grants.dart';
+import '../data/feature_flags.dart';
 import '../data/history_store.dart';
 import '../data/srs_repository.dart';
 
@@ -41,7 +42,7 @@ class _MockExamScreenState extends ConsumerState<MockExamScreen> {
     final count = level.questionCount.clamp(1, widget.questions.length);
     final store = ref.read(srsProvider).valueOrNull ?? const SrsStore({}, {});
     setState(() {
-      _picked = _pickWeighted(widget.questions, count, store);
+      _picked = _pickWeighted(mockExamEligible(widget.questions), count, store);
       _answers.clear();
       _index = 0;
       _started = true;
@@ -56,6 +57,7 @@ class _MockExamScreenState extends ConsumerState<MockExamScreen> {
         subjectIds: subjectIds,
         count: count,
         seed: DateTime.now().millisecondsSinceEpoch,
+        allowedTypes: kMockExamAllowedTypes,
       )..shuffle();
       _answers.clear();
       _index = 0;
