@@ -65,15 +65,15 @@ Future<void> main() async {
 
   // 広告。本番ユニットIDはビルド時に --dart-define で渡す（ad_unit_ids.dart）。
   // Web・iOS は広告を出さない。リリースで未指定なら空のIDで、広告なしのまま起動する。
+  final adIds = adUnitIdsFor(
+    isWeb: kIsWeb,
+    isAndroid: !kIsWeb && Platform.isAndroid,
+    isRelease: kReleaseMode,
+  );
   final adGate = await AdGate.init(
-    config: AdConfig(
-      unitIds: adUnitIdsFor(
-        isWeb: kIsWeb,
-        isAndroid: !kIsWeb && Platform.isAndroid,
-        isRelease: kReleaseMode,
-      ),
-    ),
-    backend: (kIsWeb || !Platform.isAndroid) ? NoAdsBackend() : null,
+    config: AdConfig(unitIds: adIds),
+    // IDが空(Web・iOS、または本番IDが未指定のリリース)なら、広告SDKを使わず、広告なしで起動する。
+    backend: adIds.banner.isEmpty && adIds.interstitial.isEmpty ? NoAdsBackend() : null,
     adsHidden: () => entitlementService.state.adsHidden,
     isRelease: kReleaseMode,
   );
