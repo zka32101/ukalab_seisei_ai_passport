@@ -26,3 +26,18 @@ Future<UsageQuota> mockExamQuota({
     clock: clock,
   );
 }
+
+/// 「今日の復習」の1日の回数制限（方針 D6。標準値は1日10問。値は暫定）。
+/// 数えるのは、復習の期限が来ていた問題に答えた回数。プレミアムなら無制限。
+/// 制限は「今日の復習」の案内だけにかける（間違いノート自体は無料のまま）。
+Future<UsageQuota> todayReviewQuota({
+  required bool isPremium,
+  DateTime Function()? clock,
+}) async {
+  final prefs = await SharedPreferences.getInstance();
+  return FreeTierLimits.standard.reviewQuota(
+    isPremium: isPremium,
+    store: _PrefsKeyValueStore(prefs),
+    clock: clock,
+  );
+}
