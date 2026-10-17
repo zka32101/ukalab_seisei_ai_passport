@@ -53,6 +53,7 @@ import 'package:ukalab_seisei_ai_passport/screens/route_planner_screen.dart';
 import 'package:ukalab_seisei_ai_passport/screens/settings_screen.dart';
 import 'package:ukalab_seisei_ai_passport/screens/teach_mascot_screen.dart';
 import 'package:ukalab_seisei_ai_passport/screens/term_map_screen.dart';
+import 'test_ads.dart';
 
 // ---------------------------------------------------------------- データ
 
@@ -91,6 +92,7 @@ List<Override> _overrides(_Data d, {bool premium = false}) {
   return [
     entitlementServiceProvider.overrideWithValue(FakeEntitlementService(
         initial: premium ? const EntitlementState(hasPremium: true) : EntitlementState.free)),
+    stubAdGateOverride(),
     handsFreeStoreProvider.overrideWithValue(InMemoryHandsFreeStore()),
     examDateStoreProvider.overrideWithValue(ExamDateStore('test')),
     dailyGoalAchievementsOverride,

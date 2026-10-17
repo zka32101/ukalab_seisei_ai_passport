@@ -9,6 +9,7 @@ import 'package:ukalab_core/reminder.dart' show reminderOverrides;
 import 'package:ukalab_core/ui.dart' show studyNotesOverrides;
 
 import 'package:ukalab_seisei_ai_passport/main.dart';
+import 'test_ads.dart';
 
 // rootBundle.loadString は大きなファイル（questions.jsonl）を compute()
 // （別Isolate）でデコードする。widget test 環境でそれを待つには
@@ -42,6 +43,7 @@ void main() {
         ProviderScope(
           overrides: [
             entitlementServiceProvider.overrideWithValue(FakeEntitlementService()),
+            stubAdGateOverride(),
             handsFreeStoreProvider.overrideWithValue(InMemoryHandsFreeStore()),
             ...(await tester.runAsync(() => studyNotesOverrides('test')))!,
             ...(await tester.runAsync(() => dailyGoalOverrides('test')))!,

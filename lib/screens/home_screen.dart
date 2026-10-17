@@ -1,4 +1,6 @@
+import 'package:app_common_kit/app_common_kit.dart' show BannerPlacement, adGateProvider;
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' show Consumer;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ukalab_core/daily_goal.dart' show DailyMissionCard;
 import 'package:ukalab_core/reminder.dart' show StudyReminderCard;
@@ -296,6 +298,10 @@ class HomeScreen extends StatelessWidget {
             child: HomeMenuGrid(items: [
               for (final e in _entries(_HomeGroup.lab)) _item(context, e),
             ]),
+          ),
+          const SizedBox(height: 8),
+          Consumer(
+            builder: (context, ref, _) => Center(child: ref.watch(adGateProvider).banner(BannerPlacement.home)),
           ),
         ],
       ),

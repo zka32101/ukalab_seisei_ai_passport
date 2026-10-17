@@ -9,6 +9,7 @@ import 'package:ukalab_core/reminder.dart' show reminderOverrides;
 import 'package:ukalab_core/ui.dart' show studyNotesOverrides;
 import 'package:ukalab_core/ukalab_core.dart';
 import 'package:ukalab_seisei_ai_passport/screens/learn_screen.dart';
+import 'test_ads.dart';
 
 /// 選択式の解答直後に PracticeSession.current が次の問題へ進んでも、
 /// 解説・正誤の表示が解答した問題のままであることの回帰テスト。
@@ -32,6 +33,7 @@ Future<void> _pumpLearn(WidgetTester tester) async {
   SharedPreferences.setMockInitialValues({});
   final container = ProviderContainer(overrides: [
     handsFreeStoreProvider.overrideWithValue(InMemoryHandsFreeStore()),
+    stubAdGateOverride(),
     ...(await tester.runAsync(() => studyNotesOverrides('test')))!,
     ...(await tester.runAsync(() => dailyGoalOverrides('test')))!,
     ...(await tester.runAsync(() => reminderOverrides('test')))!,

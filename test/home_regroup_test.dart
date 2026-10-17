@@ -12,6 +12,7 @@ import 'package:ukalab_seisei_ai_passport/data/core_features.dart';
 import 'package:ukalab_seisei_ai_passport/screens/boundary_screen.dart';
 import 'package:ukalab_seisei_ai_passport/screens/glossary_screen.dart';
 import 'package:ukalab_seisei_ai_passport/screens/home_screen.dart';
+import 'test_ads.dart';
 
 ExamConfig _exam() => ExamConfig(
       examId: kExamId,
@@ -35,6 +36,7 @@ Future<void> _pump(
   addTearDown(tester.view.resetDevicePixelRatio);
   final container = ProviderContainer(overrides: [
     entitlementServiceProvider.overrideWithValue(FakeEntitlementService()),
+    stubAdGateOverride(),
     handsFreeStoreProvider.overrideWithValue(InMemoryHandsFreeStore()),
     ...(await tester.runAsync(() => studyNotesOverrides('test')))!,
     ...(await tester.runAsync(() => dailyGoalOverrides('test')))!,

@@ -130,13 +130,16 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
     grantAnswerCoins(ref, q.qid, ref.read(historyProvider));
   }
 
-  void _next() {
+  Future<void> _next() async {
     setState(() {
       _displayQuestion = _session.current;
       _selected = null;
       _answered = false;
       _shownAt = DateTime.now();
     });
+    if (_session.current == null) {
+      await ref.read(adGateProvider).maybeShowInterstitial(InterstitialTrigger.sessionEnd);
+    }
   }
 
   @override
@@ -149,10 +152,17 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
       return Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
-          child: ResultSummary(
-            correct: _session.correctCount,
-            total: _session.questions.length,
-            onRetry: _restart,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ResultSummary(
+                correct: _session.correctCount,
+                total: _session.questions.length,
+                onRetry: _restart,
+              ),
+              const SizedBox(height: 16),
+              ref.watch(adGateProvider).banner(BannerPlacement.result),
+            ],
           ),
         ),
       );
