@@ -2,6 +2,7 @@ import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_core/ukalab_core.dart';
 
 import 'core_features.dart';
+import 'mock_exam_quota.dart';
 
 /// 「今日の復習」(間違いノートの復習日程。端末内)。
 /// 保存するのは問題ID・段・次回の日・分野IDだけ。間違いノート([mistakeNoteStore])から
@@ -32,6 +33,8 @@ Future<void> recordReviewResult(
     await s.write(
       reviewSchedulerEngine.applyResult(items, qid, correct: correct, now: at),
     );
+    // 期限が来ていた復習に答えた回数を1日ごとに数える(復習の案内の無料枠用)。
+    await (await todayReviewQuota(isPremium: false)).tryConsume();
   } catch (_) {
     // 復習日程は派生データ。次回の同期で整う。
   }

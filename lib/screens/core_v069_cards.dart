@@ -1,3 +1,4 @@
+import 'package:app_common_kit/app_common_kit.dart' show EntitlementState, entitlementStateProvider;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ukalab_core/ui.dart';
@@ -6,6 +7,7 @@ import 'package:ukalab_core/ukalab_core.dart';
 import '../data/core_features.dart';
 import '../data/history_store.dart';
 import '../data/mistake_notes.dart';
+import '../data/mock_exam_quota.dart';
 import '../data/oshi_recap.dart';
 import '../data/review_schedule.dart';
 import 'mistake_note_screen.dart';
@@ -35,8 +37,13 @@ class TodayReviewHomeCard extends ConsumerStatefulWidget {
       _TodayReviewHomeCardState();
 }
 
+const _freeReviewPerDay = 10;
+
 class _TodayReviewHomeCardState extends ConsumerState<TodayReviewHomeCard> {
   int _due = 0;
+
+  /// 無料版の1日の復習の上限に達していて、まだ期限の来た復習が残っている。
+  bool _limitReached = false;
 
   @override
   void initState() {
@@ -60,12 +67,25 @@ class _TodayReviewHomeCardState extends ConsumerState<TodayReviewHomeCard> {
       await store.write(items);
       if (!mounted) return;
       final available = {for (final q in widget.questions) q.qid};
-      setState(
-        () => _due = reviewSchedulerEngine.dueCount([
-          for (final i in items)
-            if (available.contains(i.qid)) i,
-        ], widget.clock()),
-      );
+      final total = reviewSchedulerEngine.dueCount([
+        for (final i in items)
+          if (available.contains(i.qid)) i,
+      ], widget.clock());
+      var due = total;
+      var limitReached = false;
+      // 無料版は1日の復習が決まった数まで(プレミアムは無制限)。
+      final isPremium =
+          (ref.read(entitlementStateProvider).valueOrNull ?? EntitlementState.free).hasPremium;
+      if (!isPremium) {
+        final remaining = (await todayReviewQuota(isPremium: false)).remaining ?? total;
+        if (due > remaining) due = remaining;
+        limitReached = remaining <= 0 && total > 0;
+      }
+      if (!mounted) return;
+      setState(() {
+        _due = due;
+        _limitReached = limitReached;
+      });
     } catch (_) {
       // 復習日程は派生データ。読めなければ件数 0 の穏やかな表示のまま。
     }
@@ -74,6 +94,34 @@ class _TodayReviewHomeCardState extends ConsumerState<TodayReviewHomeCard> {
   @override
   Widget build(BuildContext context) {
     ref.listen(historyProvider, (previous, next) => _refresh());
+    if (_limitReached) {
+      return Card(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('今日の復習', style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 4),
+              const Text(
+                '無料版の今日の復習($_freeReviewPerDay問)は終わりました。\n'
+                '続きは明日。プレミアムなら、続けて復習できます(間違いノートは、いつでも開けます)。',
+              ),
+              const SizedBox(height: 8),
+              OutlinedButton(
+                onPressed: () => openMistakeNote(
+                  context,
+                  exam: widget.exam,
+                  questions: widget.questions,
+                ),
+                child: const Text('間違いノートを開く'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     return TodayReviewCard(
       dueCount: _due,
       onStart: () => openMistakeNote(
