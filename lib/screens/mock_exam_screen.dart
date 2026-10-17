@@ -7,6 +7,8 @@ import 'package:ukalab_core/mock_exam_history.dart';
 import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_core/ukalab_core.dart';
 
+import '../data/mock_exam_quota.dart';
+
 import '../data/coin_grants.dart';
 import '../data/feature_flags.dart';
 import '../data/history_store.dart';
@@ -36,6 +38,30 @@ class _MockExamScreenState extends ConsumerState<MockExamScreen> {
         isPremium: (ref.read(entitlementStateProvider).valueOrNull ?? EntitlementState.free)
             .hasPremium,
       );
+
+  /// 無料版は月の回数に上限がある。使える回数が残っていれば1回分を使って始める。
+  Future<void> _tryStart() async {
+    final quota = await mockExamQuota(isPremium: _isPremium(ref));
+    if (!await quota.tryConsume()) {
+      if (!mounted) return;
+      await showDialog<void>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('今月の模擬試験は使い切りました'),
+          content: const Text(
+            '無料版の模擬試験は、月に${1}回までです。来月になると、また受けられます。\n'
+            'プレミアムなら、回数の制限なく受けられます（設定から購入できます）。',
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('閉じる')),
+          ],
+        ),
+      );
+      return;
+    }
+    if (!mounted) return;
+    _start();
+  }
 
   void _start() {
     final level = widget.exam.levels.first;
@@ -144,7 +170,7 @@ class _MockExamScreenState extends ConsumerState<MockExamScreen> {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 24),
-              FilledButton(onPressed: _start, child: const Text('模擬試験を始める')),
+              FilledButton(onPressed: _tryStart, child: const Text('模擬試験を始める')),
               const SizedBox(height: 8),
               OutlinedButton(
                 onPressed: () {
@@ -177,7 +203,7 @@ class _MockExamScreenState extends ConsumerState<MockExamScreen> {
                 correct: result.total.score,
                 total: result.total.max,
                 passRatio: 0.70,
-                onRetry: _start,
+                onRetry: _tryStart,
               ),
               const SizedBox(height: 16),
               // この模擬試験の分野別の様子(科目ごと)。点数では責めず、次に少しだけやる分野を出す。
