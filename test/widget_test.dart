@@ -29,9 +29,9 @@ Future<void> _waitUntilFound(WidgetTester tester, Finder finder) async {
 
 void main() {
   setUp(() {
-    // ホームの「道具」「体験ラボ」は初回は畳まれているため、このテストでは開いた状態から始める。
+    // ホームの「体験ラボ」は初回は畳まれているため、このテストでは開いた状態から始める。
+    // （「道具」は「学ぶ」タブへ移った。）
     SharedPreferences.setMockInitialValues({
-      'ukalab_seisei_home_section_tools': true,
       'ukalab_seisei_home_section_lab': true,
     });
   });

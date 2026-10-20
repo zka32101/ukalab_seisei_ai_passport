@@ -8,7 +8,6 @@ import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_core/ukalab_core.dart';
 
 import '../widgets/cert_prop_badge.dart';
-import 'ai_news_screen.dart';
 import 'boundary_screen.dart';
 import 'core_v069_cards.dart';
 import 'confusion_matrix_screen.dart';
@@ -16,17 +15,13 @@ import 'failure_gallery_screen.dart';
 import 'predict_run_screen.dart';
 import 'oshi_home_cards.dart';
 import 'exam_prep_entry.dart';
-import 'mistake_note_screen.dart';
 import 'nagara_entry.dart';
 import 'premium_practice_cards.dart';
 import 'route_planner_screen.dart';
 import 'teach_mascot_screen.dart';
-import 'glossary_screen.dart';
-import 'reading_screen.dart';
-import 'term_map_screen.dart';
 
 /// ホームの分類（折りたたみ・見出し単位）。
-enum _HomeGroup { today, tools, lab }
+enum _HomeGroup { today, lab }
 
 class _ExperienceEntry {
   const _ExperienceEntry({
@@ -46,13 +41,6 @@ class _ExperienceEntry {
 
 final _experienceEntries = [
   _ExperienceEntry(
-    group: _HomeGroup.tools,
-    icon: Icons.newspaper,
-    title: '今月のAI動向',
-    subtitle: '一次情報にもとづく最新動向を、自分の言葉での要約で',
-    builder: (_) => const AiNewsScreen(),
-  ),
-  _ExperienceEntry(
     group: _HomeGroup.lab,
     icon: Icons.auto_awesome,
     title: '推しの答案を添削',
@@ -65,27 +53,6 @@ final _experienceEntries = [
     title: '学習の失敗図鑑',
     subtitle: '学習曲線から症状を見抜き、正しい対策を選ぼう',
     builder: (_) => const FailureGalleryScreen(),
-  ),
-  _ExperienceEntry(
-    group: _HomeGroup.tools,
-    icon: Icons.menu_book_outlined,
-    title: '用語集',
-    subtitle: '用語を検索して、覚えた用語にチェックを付けよう',
-    builder: (_) => const GlossaryScreen(),
-  ),
-  _ExperienceEntry(
-    group: _HomeGroup.tools,
-    icon: Icons.auto_stories_outlined,
-    title: '章ごとの解説読み物',
-    subtitle: '公式の章立てに沿って、学習項目を体系的に読める',
-    builder: (_) => const ReadingScreen(),
-  ),
-  _ExperienceEntry(
-    group: _HomeGroup.tools,
-    icon: Icons.hub_outlined,
-    title: '用語マップ',
-    subtitle: 'AIの歴史の系譜や、用語どうしのつながりを見る',
-    builder: (_) => const TermMapScreen(),
   ),
   _ExperienceEntry(
     group: _HomeGroup.lab,
@@ -117,7 +84,8 @@ final _experienceEntries = [
   ),
 ];
 
-/// 「ホーム」タブ。分類ごとの見出し（HomeSection）で並べる。推しカードは後続で追加。
+/// 「ホーム」タブ。間違いノート・メモ・用語集・読み物・用語マップ・AI動向は「学ぶ」タブの「道具」へ移動した（LearnToolsSection）。
+/// 分類ごとの見出し（HomeSection）で並べる。推しカードは後続で追加。
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
     super.key,
@@ -154,9 +122,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final tools = _entries(_HomeGroup.tools);
-    final toolsTop = tools.where((e) => e.title == '今月のAI動向').toList();
-    final toolsRest = tools.where((e) => e.title != '今月のAI動向').toList();
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -209,15 +174,6 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 8),
                 PremiumPracticeCards(exam: exam, questions: questions),
                 for (final e in _entries(_HomeGroup.today)) _tile(context, e),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: HomeMenuTile(
-                    icon: Icons.edit_note_outlined,
-                    title: '間違いノート',
-                    subtitle: '間違えた問題を見返して、解き直せます。',
-                    onTap: () => openMistakeNote(context, exam: exam, questions: questions),
-                  ),
-                ),
               ],
             ),
           ),
@@ -268,24 +224,6 @@ class HomeScreen extends StatelessWidget {
                 ExamCountdownEntry(exam: exam),
                 const SizedBox(height: 4),
                 ExamPrepEntryCard(exam: exam, questions: questions),
-              ],
-            ),
-          ),
-          _PersistedHomeSection(
-            id: 'tools',
-            title: '道具',
-            subtitle: '調べる・読む・書きとめる',
-            leading: const Icon(Icons.handyman_outlined),
-            initiallyExpanded: false,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                StudyNotesHomeCards(loadQuestions: () async => questions),
-                const SizedBox(height: 8),
-                HomeMenuGrid(items: [
-                  for (final e in toolsRest) _item(context, e),
-                  for (final e in toolsTop) _item(context, e),
-                ]),
               ],
             ),
           ),

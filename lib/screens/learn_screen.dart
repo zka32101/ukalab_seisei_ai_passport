@@ -12,6 +12,7 @@ import '../data/feature_flags.dart';
 import '../data/history_store.dart';
 import '../data/review_schedule.dart';
 import '../data/srs_repository.dart';
+import '../widgets/learn_tools_section.dart';
 
 /// 「学ぶ」タブ: 短い演習セッション。解答ごとに間隔反復（記録タブ）の記録を更新する。
 /// [priorityQids] を渡すと、その問題を先頭に出題する（記録タブからの復習呼び出し用）。
@@ -23,12 +24,17 @@ class LearnScreen extends ConsumerStatefulWidget {
     this.priorityQids = const [],
     this.mode = PracticeMode.practice,
     this.newTypesEnabled = kNewQuestionTypesEnabled,
+    this.exam,
   });
 
   final List<Question> questions;
   final int sessionSize;
   final List<String> priorityQids;
   final PracticeMode mode;
+
+  /// 渡すと、画面の下に「道具」（間違いノート・ブックマーク・メモ・用語集・読み物・用語マップ・AI動向の入口）を出す。
+  /// 「学ぶ」タブ本体だけが渡す（弱点ドリルなど、演習だけを開く使い方では渡さない）。
+  final ExamConfig? exam;
 
   /// ○×・空欄補充・説明から用語を出題に含めるか（既定は [kNewQuestionTypesEnabled]）。
   /// false のときは [questions] に含まれていても出さない（二重の防御）。
@@ -142,10 +148,28 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
     }
   }
 
+  /// 「道具」の入口。[LearnScreen.exam] を渡されたときだけ。
+  Widget _tools() {
+    final exam = widget.exam;
+    if (exam == null) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: LearnToolsSection(exam: exam, questions: widget.questions),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_pool.isEmpty) {
-      return const EmptyState(message: '問題データがまだありません。');
+      if (widget.exam == null) {
+        return const EmptyState(message: '問題データがまだありません。');
+      }
+      return SingleChildScrollView(
+        child: Column(children: [
+          const EmptyState(message: '問題データがまだありません。'),
+          _tools(),
+        ]),
+      );
     }
     final q = _displayQuestion;
     if (q == null) {
@@ -162,6 +186,7 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
               ),
               const SizedBox(height: 16),
               ref.watch(adGateProvider).banner(BannerPlacement.result),
+              _tools(),
             ],
           ),
         ),
@@ -233,6 +258,7 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
             const SizedBox(height: 16),
             FilledButton(onPressed: _next, child: const Text('次へ')),
           ],
+          _tools(),
         ],
       ),
     );
@@ -296,6 +322,7 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
             const SizedBox(height: 12),
             QuestionMemoField(key: ValueKey(q.qid), qid: q.qid),
           ],
+          _tools(),
         ],
       ),
     );

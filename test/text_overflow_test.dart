@@ -157,7 +157,6 @@ Map<String, Object> _prefs(_Data d) {
         correct: i % 3 == 0, ms: 4000, at: now.subtract(Duration(hours: i + 1))));
   }
   return {
-    'ukalab_seisei_home_section_tools': true,
     'ukalab_seisei_home_section_lab': true,
     'ukalab_seisei_ai_passport_history_v1': encodeHistory(records),
   };
@@ -401,6 +400,22 @@ void main() {
         await _scrollThrough(t);
         await _tapText(t, '次へ');
       }
+    });
+  });
+
+  testWidgets('学ぶタブ(演習+道具)', (tester) async {
+    await _check(tester, (d) => Scaffold(body: LearnScreen(questions: d.questions.take(6).toList(), sessionSize: 3, exam: d.exam)),
+        act: (t) async {
+      await _tapText(t, 'A');
+      await _scrollThrough(t);
+    });
+  });
+
+  testWidgets('学ぶタブ(結果画面+道具)', (tester) async {
+    await _check(tester, (d) => Scaffold(body: LearnScreen(questions: d.questions.take(3).toList(), sessionSize: 1, exam: d.exam)),
+        act: (t) async {
+      await _tapText(t, 'B');
+      await _tapText(t, '次へ');
     });
   });
 
