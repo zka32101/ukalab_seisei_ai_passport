@@ -124,8 +124,7 @@ void main() {
       );
       await tester.tap(find.byKey(const Key('saveHistoryCsv')));
       await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 50)));
-      await tester.pump();
-      await tester.pump();
+      await tester.pumpAndSettle();
     }
 
     testWidgets('shareCsv に UTF-8 BOM・text/csv・ukalab_history_YYYYMMDD.csv で渡し、個人情報の列を持たない', (tester) async {

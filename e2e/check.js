@@ -19,7 +19,7 @@ function check(name, ok) {
 
 (async () => {
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--no-sandbox'] });
-  const page = await browser.newPage({ locale: 'ja-JP', viewport: { width: 420, height: 1000 } });
+  const page = await browser.newPage({ locale: 'ja-JP', viewport: { width: 420, height: 1800 } });
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
 
