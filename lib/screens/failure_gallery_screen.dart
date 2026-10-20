@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/failure_gallery_repository.dart';
+import '../widgets/lab/wrapped_failure_gallery_widget.dart';
 import '../widgets/wrapped_app_bar.dart';
 
 /// 「学習の失敗図鑑」体験（型⑦、決定76）。学習曲線（訓練・検証誤差）を見て
@@ -70,7 +71,7 @@ class _FailureGalleryScreenState extends ConsumerState<FailureGalleryScreen> {
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
                 const SizedBox(height: 8),
-                FailureGalleryWidget(
+                WrappedFailureGalleryWidget(
                   key: ValueKey(c.caseId),
                   title: '症例 ${_index + 1}',
                   curve: [

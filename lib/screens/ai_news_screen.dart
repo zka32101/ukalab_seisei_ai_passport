@@ -61,44 +61,9 @@ class AiNewsScreen extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              _formatAsOf(item.asOfDate),
-                              style: Theme.of(context).textTheme.labelMedium,
-                            ),
-                          ),
-                          if (item.isExamRelevant) ...[
-                            const SizedBox(width: 8),
-                            // 狭い幅・大きい文字では「試験に出そう」を折り返して全文を見せる。
-                            Flexible(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 2,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .errorContainer,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  '試験に出そう',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onErrorContainer,
-                                      ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ],
+                      Text(
+                        _formatAsOf(item.asOfDate),
+                        style: Theme.of(context).textTheme.labelMedium,
                       ),
                       const SizedBox(height: 4),
                       Text(

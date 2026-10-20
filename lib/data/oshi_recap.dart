@@ -79,6 +79,27 @@ String Function(String topicId) topicLabelFor(
   return (id) => byTopic[id] ?? id;
 }
 
+/// 弱点カード用の論点の表示名。論点ID(slug)は画面に出さない。
+/// 科目IDならその科目名、論点IDならその論点の最初の問題文の先頭([maxChars]字)。
+/// どちらも引けないときは汎用の「この論点」(IDは出さない)。
+String Function(String topicId) weakTopicLabelFor(
+  List<Question> questions,
+  String? Function(String subjectId) subjectName, {
+  int maxChars = 24,
+}) {
+  final byTopic = <String, String>{};
+  for (final q in questions) {
+    if (byTopic.containsKey(q.topicId)) continue;
+    final flat = q.displayPrompt.replaceAll(RegExp(r'\s+'), ' ').trim();
+    if (flat.isEmpty) continue;
+    final head = flat.runes.length > maxChars
+        ? '${String.fromCharCodes(flat.runes.take(maxChars))}…'
+        : flat;
+    byTopic[q.topicId] = head;
+  }
+  return (id) => subjectName(id) ?? byTopic[id] ?? 'この論点';
+}
+
 /// 推しの成長演出に渡す累計。回答数と学習日数(連続ではなく合計)を解答履歴から数える。
 /// 履歴は端末内に直近 [historyMaxRecords] 件まで保存されるため、それより古い分は含まれない。
 OshiGrowthProgress oshiGrowthProgressFor(List<ProgressRecord> records) => OshiGrowthProgress(

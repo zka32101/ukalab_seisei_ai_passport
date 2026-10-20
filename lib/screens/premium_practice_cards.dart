@@ -5,6 +5,7 @@ import 'package:ukalab_core/ukalab_core.dart';
 
 import 'package:ukalab_core/answer_feedback.dart' show WeakSummaryCard, canShowWeakSummary;
 import '../data/history_store.dart';
+import '../data/oshi_recap.dart';
 import 'learn_screen.dart';
 import '../widgets/wrapped_app_bar.dart';
 
@@ -72,6 +73,7 @@ class PremiumPracticeCards extends ConsumerWidget {
             records: ref.watch(historyProvider),
             now: clock(),
             questions: questions,
+            chapterLabel: weakTopicLabelFor(questions, (id) => exam.subject(id)?.name),
             includeCalculation: false,
           ),
           const SizedBox(height: 16),

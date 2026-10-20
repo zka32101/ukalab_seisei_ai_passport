@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/confusion_matrix_repository.dart';
+import '../widgets/lab/wrapped_confusion_matrix_lab_widget.dart';
 import '../widgets/wrapped_app_bar.dart';
 
 /// 「評価指標ラボ」体験（画期的な機能3）。混同行列（TP/FP/FN/TN）を動かして
@@ -72,7 +73,7 @@ class _ConfusionMatrixScreenState
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
                 const SizedBox(height: 8),
-                ConfusionMatrixLabWidget(
+                WrappedConfusionMatrixLabWidget(
                   key: ValueKey(s.scenarioId),
                   scenario: ConfusionMatrixScenarioSpec(
                     title: s.title,
