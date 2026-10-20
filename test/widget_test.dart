@@ -29,9 +29,9 @@ Future<void> _waitUntilFound(WidgetTester tester, Finder finder) async {
 
 void main() {
   setUp(() {
-    // ホームの「道具」「体験ラボ」は初回は畳まれているため、このテストでは開いた状態から始める。
+    // ホームの「体験ラボ」は初回は畳まれているため、このテストでは開いた状態から始める。
+    // （「道具」は「学ぶ」タブへ移った。）
     SharedPreferences.setMockInitialValues({
-      'ukalab_seisei_home_section_tools': true,
       'ukalab_seisei_home_section_lab': true,
     });
   });
@@ -131,20 +131,6 @@ void main() {
       expect(find.text('学習の失敗図鑑'), findsWidgets);
       expect(find.textContaining('1 / '), findsOneWidget);
 
-      // ホームタブから「用語マップ」にも遷移できる。
-      await tester.pageBack();
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 600));
-      await _waitUntilFound(tester, find.text('用語マップ'));
-      await tester.ensureVisible(find.text('用語マップ'));
-      await tester.pump();
-
-      await tester.tap(find.text('用語マップ'));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 400));
-
-      expect(find.text('用語マップ'), findsWidgets);
-
       // ホームタブから「境界線スライダー」にも遷移できる。
       await tester.pageBack();
       await tester.pump();
@@ -204,7 +190,23 @@ void main() {
 
       expect(find.text('今日やる3つ'), findsWidgets);
 
-      // ホームタブから「今月のAI動向」にも遷移できる。
+      // 「学ぶ」タブの「道具」から「用語マップ」「今月のAI動向」に遷移できる。
+      await tester.pageBack();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
+      await tester.tap(find.text('学ぶ'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      await _waitUntilFound(tester, find.text('用語マップ'));
+      await tester.ensureVisible(find.text('用語マップ'));
+      await tester.pump();
+
+      await tester.tap(find.text('用語マップ'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(find.text('用語マップ'), findsWidgets);
+
       await tester.pageBack();
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 600));

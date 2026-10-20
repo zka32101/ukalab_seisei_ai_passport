@@ -159,7 +159,7 @@ class _RootPage extends ConsumerWidget {
         return UkalabShell(
           pages: [
             HomeScreen(exam: data.exam, questionCount: questions.length, questions: questions),
-            LearnScreen(questions: questions),
+            LearnScreen(questions: questions, exam: data.exam),
             MockExamScreen(exam: data.exam, questions: questions),
             const RecordScreen(),
             SettingsScreen(questions: questions, exam: data.exam),
