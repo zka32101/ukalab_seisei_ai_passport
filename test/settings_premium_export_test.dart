@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'dart:ui' show Rect;
 
 import 'package:app_common_kit/app_common_kit.dart'
     show
@@ -19,6 +18,7 @@ import 'package:ukalab_core/exam_date.dart';
 import 'package:ukalab_core/reminder.dart' show reminderOverrides;
 import 'package:ukalab_core/ui.dart' show FileSaver, PremiumBenefitsCard, studyNotesOverrides;
 import 'package:ukalab_core/ukalab_core.dart';
+import 'package:ukalab_seisei_ai_passport/data/history_store.dart';
 import 'package:ukalab_seisei_ai_passport/screens/settings_screen.dart';
 
 Question _q(String qid) => Question(
@@ -78,7 +78,9 @@ Future<void> _pump(
       ),
     ),
   );
-  await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 50)));
+  // 履歴の読み込み(実際の非同期)をここで済ませる。
+  final container = ProviderScope.containerOf(tester.element(find.byType(SettingsScreen)));
+  await tester.runAsync(() => container.read(historyProvider.notifier).ready);
   await tester.pump();
   await tester.pump();
 }
