@@ -43,7 +43,7 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Serve and check
         env:
-          E2E_SETTINGS: '購入,ながら学習モード,受験日'
+          E2E_SETTINGS: '購入,プレミアムでできること,ながら学習モード,受験日'
           E2E_EXAM_DATE: '1'
         run: |
           (cd build/web && python3 -m http.server 8099 >/dev/null 2>&1 &)
