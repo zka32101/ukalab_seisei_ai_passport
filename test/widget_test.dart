@@ -131,20 +131,6 @@ void main() {
       expect(find.text('学習の失敗図鑑'), findsWidgets);
       expect(find.textContaining('1 / '), findsOneWidget);
 
-      // ホームタブから「用語マップ」にも遷移できる。
-      await tester.pageBack();
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 600));
-      await _waitUntilFound(tester, find.text('用語マップ'));
-      await tester.ensureVisible(find.text('用語マップ'));
-      await tester.pump();
-
-      await tester.tap(find.text('用語マップ'));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 400));
-
-      expect(find.text('用語マップ'), findsWidgets);
-
       // ホームタブから「境界線スライダー」にも遷移できる。
       await tester.pageBack();
       await tester.pump();
@@ -204,7 +190,23 @@ void main() {
 
       expect(find.text('今日やる3つ'), findsWidgets);
 
-      // ホームタブから「今月のAI動向」にも遷移できる。
+      // 「学ぶ」タブの「道具」から「用語マップ」「今月のAI動向」に遷移できる。
+      await tester.pageBack();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
+      await tester.tap(find.text('学ぶ'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      await _waitUntilFound(tester, find.text('用語マップ'));
+      await tester.ensureVisible(find.text('用語マップ'));
+      await tester.pump();
+
+      await tester.tap(find.text('用語マップ'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(find.text('用語マップ'), findsWidgets);
+
       await tester.pageBack();
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 600));
