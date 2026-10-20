@@ -122,6 +122,8 @@ void main() {
         400,
         scrollable: find.byType(Scrollable).first,
       );
+      await tester.ensureVisible(find.byKey(const Key('saveHistoryCsv')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('saveHistoryCsv')));
       await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 50)));
       await tester.pumpAndSettle();
