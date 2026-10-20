@@ -167,7 +167,6 @@ Map<String, Object> _prefs(_Data d) {
 /// core / kit 側で直したら、ここから外す(外すと再発を検知できる)。
 const _knownDependencyFiles = [
   'ui/answer_feedback/weak_summary_card.dart', // ホーム「弱点」カードの行(順位・件数)
-  'ui/ui_kit/failure_gallery.dart', // 学習の失敗図鑑の凡例(訓練誤差/検証誤差)
   'ui/mistake_note/mistake_note_view.dart', // 間違いノートの見出し+絞り込み(縦)
   'lib/glossary.dart', // 用語集の見出し(検索+絞り込み+分野チップ)。core v0.71.1 でチップ行が文字倍率に比例して高くなり、幅280dp・文字300%で縦に42px溢れる
 ];

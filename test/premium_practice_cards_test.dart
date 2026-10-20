@@ -109,6 +109,39 @@ void main() {
     expect(find.byType(LearnScreen), findsOneWidget);
   });
 
+  testWidgets('今週の弱点は、論点IDではなく問題文の先頭で表示する', (tester) async {
+    const slug = 'rlhf-vs-pretraining-goal';
+    final q = Question(
+      qid: 'q-rlhf',
+      examId: 'seisei_ai_passport',
+      subjectId: 's1',
+      topicId: slug,
+      prompt: '事前学習とRLHFは、それぞれ何を高めることを目的としているか。',
+      choices: const ['a', 'b'],
+      answerIndex: 0,
+      explanation: 'e',
+      source: QuestionSource.original,
+      sourceRef: '自作',
+      contentVer: '1',
+    );
+    final c = await _pump(tester, premium: true, exam: _exam(), questions: [q]);
+    await c.read(historyProvider.notifier).record(q, correct: false, at: _now);
+    await tester.pump();
+    await tester.pump();
+    expect(find.textContaining(slug), findsNothing);
+    expect(find.textContaining('事前学習とRLHF'), findsWidgets);
+  });
+
+  testWidgets('今週の弱点: 問題が引けない論点でも、IDは出さず代替の名前を出す', (tester) async {
+    const slug = 'rlhf-vs-pretraining-goal';
+    final c = await _pump(tester, premium: true, exam: _exam(), questions: [_q('other', topicId: 'ch9')]);
+    await c.read(historyProvider.notifier).record(_q('q-gone', topicId: slug), correct: false, at: _now);
+    await tester.pump();
+    await tester.pump();
+    expect(find.textContaining(slug), findsNothing);
+    expect(find.textContaining('この論点'), findsWidgets);
+  });
+
   testWidgets('受験日を解除すると保存値も消える', (tester) async {
     final c = await _pump(tester, premium: true, exam: _exam());
     await c.read(examDateProvider.notifier).setDate(DateTime(2026, 11, 22));

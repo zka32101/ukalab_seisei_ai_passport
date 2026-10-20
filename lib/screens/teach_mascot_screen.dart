@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/misconception_repository.dart';
+import '../widgets/lab/wrapped_teach_mascot_widget.dart';
 import '../widgets/wrapped_app_bar.dart';
 
 /// 「推しの答案を添削」体験（型③、決定76・77）。推しがよくある誤りを含む
@@ -70,7 +71,7 @@ class _TeachMascotScreenState extends ConsumerState<TeachMascotScreen> {
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
                 const SizedBox(height: 8),
-                TeachMascotWidget(
+                WrappedTeachMascotWidget(
                   key: ValueKey(s.scenarioId),
                   title: s.title,
                   statementTemplate: s.statementTemplate,
