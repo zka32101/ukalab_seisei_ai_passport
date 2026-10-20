@@ -1,7 +1,6 @@
 import 'package:app_common_kit/app_common_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ukalab_core/achievements.dart' show AchievementsView, dailyGoalAchievementCategoryLabels;
 import 'package:ukalab_core/cross_promo.dart' show UkalabCrossPromoSection;
@@ -9,8 +8,9 @@ import 'package:ukalab_core/cross_promo.dart' show UkalabCrossPromoSection;
 import '../unofficial_notice.dart';
 import 'package:ukalab_core/daily_goal.dart' show DailyGoalSetting;
 import 'package:ukalab_core/reminder.dart' show ReminderSettingsSection;
-import 'package:ukalab_core/ui.dart' show DataManagementSection;
-import 'package:ukalab_core/ukalab_core.dart' show ExamConfig, Question, historyCsv;
+import 'package:ukalab_core/ui.dart'
+    show DataManagementSection, ExamPrepStrings, FileSaver, PremiumBenefitsCard, historyCsvFileName, shareCsv;
+import 'package:ukalab_core/ukalab_core.dart' show ExamConfig, PremiumFeature, Question, historyCsv;
 
 import 'package:ukalab_core/exam_date.dart';
 import '../data/data_parts.dart';
@@ -31,7 +31,23 @@ final appVersionProvider = FutureProvider<String>((ref) async {
 });
 
 class SettingsScreen extends ConsumerWidget {
-  const SettingsScreen({super.key, this.questions = const [], this.exam});
+  const SettingsScreen({super.key, this.questions = const [], this.exam, this.saver, this.now});
+
+  /// 履歴CSVの渡し方。null なら core の既定（Web はダウンロード、他は共有シート）。テスト用に差し替える。
+  final FileSaver? saver;
+
+  /// CSV のファイル名の日付に使う現在時刻。null なら `DateTime.now`。
+  final DateTime Function()? now;
+
+  /// このアプリで実際に使えるプレミアム機能(カスタム模擬試験は未実装なので載せない)。
+  static const premiumBenefitFeatures = [
+    PremiumFeature.weakDrill,
+    PremiumFeature.examEveMode,
+    PremiumFeature.tenMinutePlan,
+    PremiumFeature.historyExport,
+    PremiumFeature.mockExamHistory,
+    PremiumFeature.readingReadAloud,
+  ];
 
   /// 間違いノートの「解き直す」で演習画面を開くために使う。省略時は間違いノートの入口を出さない。
   final ExamConfig? exam;
@@ -39,23 +55,41 @@ class SettingsScreen extends ConsumerWidget {
   /// 履歴CSVの分野集計で、記録に章が無い旧データを補うために使う。
   final List<Question> questions;
 
-  Future<void> _copyHistory(BuildContext context, WidgetRef ref) async {
-    final records = ref.read(historyProvider);
-    final message = records.isEmpty ? 'まだ学習履歴がありません。' : '学習履歴をコピーしました。';
-    if (records.isNotEmpty) {
-      await Clipboard.setData(ClipboardData(text: historyCsv(records, questions)));
-    }
+  Future<void> _saveHistory(BuildContext context, WidgetRef ref) async {
+    // 端末に保存済みの履歴の読み込みを待つ(設定を最初に開いた直後でも空にならないように)。
+    await ref.read(historyProvider.notifier).ready;
     if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    final records = ref.read(historyProvider);
+    final strings = ExamPrepStrings.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    String? message;
+    if (records.isEmpty) {
+      message = strings.exportEmpty;
+    } else {
+      try {
+        final done = await shareCsv(
+          csv: historyCsv(records, questions),
+          fileName: historyCsvFileName((now ?? DateTime.now)()),
+          saver: saver,
+        );
+        if (done) message = strings.exportSaved;
+      } catch (_) {
+        message = strings.exportSaveFailed;
+      }
+    }
+    if (message != null) messenger.showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final handsFree = ref.watch(handsFreeProvider);
+    final hasPremium = (ref.watch(entitlementStateProvider).valueOrNull ?? EntitlementState.free).hasPremium;
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
         const PurchaseSection(),
+        // プレミアム購入者には出さない(購入の案内のため)。価格は載せない。
+        if (!hasPremium) const PremiumBenefitsCard(features: premiumBenefitFeatures),
         const Divider(height: 32),
         const TextScaleSetting(strings: TextScaleStrings.ja),
         const Divider(height: 32),
@@ -102,9 +136,11 @@ class SettingsScreen extends ConsumerWidget {
         if (kPeerStatsSettingsVisible)
           PeerStatsSettingsTile(settings: ref.watch(peerStatsSettingsProvider)),
         ListTile(
-          title: const Text('学習履歴をコピー（CSV）'),
+          key: const Key('saveHistoryCsv'),
+          leading: const Icon(Icons.download),
+          title: const Text('学習履歴をダウンロード（CSV）'),
           subtitle: const Text('日ごと・分野ごとの解答数と正答率。個人情報は含みません。'),
-          onTap: () => _copyHistory(context, ref),
+          onTap: () => _saveHistory(context, ref),
         ),
         ExamPrepSettingsEntry(questions: questions),
         if (exam != null)
