@@ -42,7 +42,7 @@ jobs:
           --dart-define=AD_BANNER_ID=${{ secrets.AD_BANNER_ID }}
           --dart-define=AD_INTERSTITIAL_ID=${{ secrets.AD_INTERSTITIAL_ID }}
           --dart-define=AD_REWARDED_ID=${{ secrets.AD_REWARDED_ID }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: app-release-aab
           path: build/app/outputs/bundle/release/app-release.aab
