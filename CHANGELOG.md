@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### 変更
+- app_common_kit を v4.0.0、ukalab_core を v0.82.0 に更新。学習向けの部品（`QuestionCard` など）が core の `learning.dart` に移ったため、import を追加した（見た目・挙動は変わらない）
 - ukalab_core を v0.79.1 に更新（app_common_kit は v3.12.0 のまま）。下部タブ名は「学ぶ」
 - 設定の「学習履歴をコピー（CSV）」を「学習履歴をダウンロード（CSV）」に変更。クリップボードへのコピーをやめ、Web はブラウザのダウンロード、それ以外は共有シートで `ukalab_history_YYYYMMDD.csv`（UTF-8 BOM 付き）を渡す。中身は従来と同じ（日ごと・分野ごとの解答数と正答率。個人情報の列なし）
 
@@ -15,7 +16,7 @@
 - 「今週の弱点」で論点ID（例: `rlhf-vs-pretraining-goal`）がそのまま表示されていたのを、問題文の先頭で表すように修正（科目名が引ければ科目名。どちらも引けない場合は「この論点」で、IDは出さない）
 
 ### 変更（資格専用キャラ）
-- ukalab_core を v0.82.1、app_common_kit を v4.0.0 に更新。学習向けの部品（QuestionCard・ExplanationPanel・ResultSummary・MockExamTrendChart など）は `package:ukalab_core/learning.dart` から読む（見た目・挙動は同じ）
+- ukalab_core を v0.82.0 から v0.82.1 に更新
 - ホームの推しカードの「推しを選ぶ」で、ロック中のヒラリのプレビューに「プレミアムを見る」を出し、押すと選択画面を閉じて設定画面（購入欄）を開く
 
 ### 内部（ユーザーに見える変化なし）

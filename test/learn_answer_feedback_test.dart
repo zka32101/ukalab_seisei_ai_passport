@@ -5,11 +5,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ukalab_core/achievements.dart' show achievementUnlockOverrides, dailyGoalAchievementsOverride;
 import 'package:ukalab_core/daily_goal.dart' show dailyGoalOverrides;
-import 'package:ukalab_core/learning.dart';
 import 'package:ukalab_core/reminder.dart' show reminderOverrides;
 import 'package:ukalab_core/ui.dart' show studyNotesOverrides;
 import 'package:ukalab_core/ukalab_core.dart';
 import 'package:ukalab_seisei_ai_passport/screens/learn_screen.dart';
+import 'package:ukalab_core/learning.dart';
 import 'test_ads.dart';
 
 /// 選択式の解答直後に PracticeSession.current が次の問題へ進んでも、
