@@ -157,7 +157,7 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          OshiCard(exam: exam, totalQuestions: questionCount),
+          OshiCard(exam: exam, totalQuestions: questionCount, questions: questions),
           _PersistedHomeSection(
             id: 'today',
             title: '今日やること',
