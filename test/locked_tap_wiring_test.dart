@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ukalab_core/exam_date.dart';
 import 'package:ukalab_core/ui.dart';
-import 'package:ukalab_core/ukalab_core.dart';
 import 'package:ukalab_seisei_ai_passport/data/character_wiring.dart';
 import 'package:ukalab_seisei_ai_passport/data/exam_repository.dart';
 import 'package:ukalab_seisei_ai_passport/screens/home_screen.dart';
