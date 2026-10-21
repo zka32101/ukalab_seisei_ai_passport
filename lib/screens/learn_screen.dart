@@ -6,6 +6,7 @@ import 'package:ukalab_core/answer_feedback.dart' show AnswerFeedbackPanel;
 import 'package:ukalab_core/daily_goal.dart' show recordDailyAnswer;
 import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_core/ukalab_core.dart';
+import 'package:ukalab_core/learning.dart';
 
 import '../data/coin_grants.dart';
 import '../data/feature_flags.dart';
