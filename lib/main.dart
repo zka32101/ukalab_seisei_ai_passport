@@ -15,6 +15,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ukalab_core/exam_date.dart';
 import 'package:ukalab_core/mock_exam_history.dart';
 import 'data/ad_unit_ids.dart';
+import 'data/character_wiring.dart';
 import 'data/coin_grants.dart';
 import 'launch_splash.dart';
 import 'data/exam_repository.dart';
@@ -92,6 +93,7 @@ Future<void> main() async {
       ...achievementUnlock,
       ...mockExamHistory,
       ...coinOutfit,
+      ...characterOverrides,
       dailyGoalAchievementsOverride,
       entitlementServiceProvider.overrideWithValue(entitlementService),
       adGateProvider.overrideWithValue(adGate),
