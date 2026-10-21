@@ -137,3 +137,13 @@ GUGAの2027年2月適用シラバス（全5章）と照合した自作問題で�
 リリース前に対応が必要な項目:
 - プライバシーポリシーURLの用意（Play Console提出必須）
 - 広告SDKを配線する場合はデータセーフティフォームの広告ID申告を追加
+
+## Firebase 設定ファイル（相互紹介）の注入
+
+- `android/app/google-services.json` はコミットしない（`.gitignore` 済み）。
+  ファイルが無いときは google-services プラグインを適用せず、通常のビルド・テストはそのまま通る。
+- リリースビルド（`build-aab.yml`）では、Secret `GOOGLE_SERVICES_JSON_BASE64` が設定されている
+  ときだけ、ビルド前にこのファイルを復元する。未設定ならスキップする。
+- 登録手順: Firebase コンソールから取得した `google-services.json` を base64 化し
+  （例: `base64 -w0 google-services.json`）、その出力を GitHub の
+  Settings > Secrets and variables > Actions に `GOOGLE_SERVICES_JSON_BASE64` として登録する。
