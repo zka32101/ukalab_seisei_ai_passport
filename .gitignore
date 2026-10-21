@@ -56,3 +56,4 @@ e2e/shots/
 
 # Firebase の設定ファイル（コミットしない）
 android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
