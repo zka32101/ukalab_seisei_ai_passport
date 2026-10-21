@@ -22,7 +22,8 @@ jobs:
       - run: flutter test
 
   web-e2e:
-    runs-on: ubuntu-latest
+    # Playwright が ubuntu 26.04 の chromium に未対応のため固定。対応後に ubuntu-latest へ戻す
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
