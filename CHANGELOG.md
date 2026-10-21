@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### 変更
+- ukalab_core を v0.82.2 に更新（資格専用キャラの画像が表示される）
 - app_common_kit を v4.0.0、ukalab_core を v0.82.0 に更新。学習向けの部品（`QuestionCard` など）が core の `learning.dart` に移ったため、import を追加した（見た目・挙動は変わらない）
 - ukalab_core を v0.79.1 に更新（app_common_kit は v3.12.0 のまま）。下部タブ名は「学ぶ」
 - 設定の「学習履歴をコピー（CSV）」を「学習履歴をダウンロード（CSV）」に変更。クリップボードへのコピーをやめ、Web はブラウザのダウンロード、それ以外は共有シートで `ukalab_history_YYYYMMDD.csv`（UTF-8 BOM 付き）を渡す。中身は従来と同じ（日ごと・分野ごとの解答数と正答率。個人情報の列なし）
