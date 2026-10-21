@@ -14,6 +14,10 @@
 - 「今月のAI動向」から「試験に出そう」の表示を削除（試験に出る可能性を示唆する表示は、非公式アプリの方針として出さない）
 - 「今週の弱点」で論点ID（例: `rlhf-vs-pretraining-goal`）がそのまま表示されていたのを、問題文の先頭で表すように修正（科目名が引ければ科目名。どちらも引けない場合は「この論点」で、IDは出さない）
 
+### 変更（資格専用キャラ）
+- ukalab_core を v0.82.1、app_common_kit を v4.0.0 に更新。学習向けの部品（QuestionCard・ExplanationPanel・ResultSummary・MockExamTrendChart など）は `package:ukalab_core/learning.dart` から読む（見た目・挙動は同じ）
+- ホームの推しカードの「推しを選ぶ」で、ロック中のヒラリのプレビューに「プレミアムを見る」を出し、押すと選択画面を閉じて設定画面（購入欄）を開く
+
 ### 内部（ユーザーに見える変化なし）
 - ukalab_core v0.81.0 へ更新し、資格専用キャラ（ヒラリ）の出し分けに使う appId（`gen_ai_passport`）とプレミアム判定を配線（画像の取り込みは別PR。画像が無い間は標準キャラ表示）
 - 新しい問題タイプ（○×・空欄補充・説明から用語。ukalab_core v0.75.0）の受け口を追加。フラグ `kNewQuestionTypesEnabled`（`lib/data/feature_flags.dart`）は **false が既定**で、出題データに新タイプが含まれていても出ない。出荷データに新タイプの問題は無い

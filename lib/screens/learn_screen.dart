@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ukalab_core/answer_feedback.dart' show AnswerFeedbackPanel;
 import 'package:ukalab_core/daily_goal.dart' show recordDailyAnswer;
+import 'package:ukalab_core/learning.dart';
 import 'package:ukalab_core/ui.dart';
 import 'package:ukalab_core/ukalab_core.dart';
 

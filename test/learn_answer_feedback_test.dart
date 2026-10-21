@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ukalab_core/achievements.dart' show achievementUnlockOverrides, dailyGoalAchievementsOverride;
 import 'package:ukalab_core/daily_goal.dart' show dailyGoalOverrides;
+import 'package:ukalab_core/learning.dart';
 import 'package:ukalab_core/reminder.dart' show reminderOverrides;
 import 'package:ukalab_core/ui.dart' show studyNotesOverrides;
 import 'package:ukalab_core/ukalab_core.dart';
