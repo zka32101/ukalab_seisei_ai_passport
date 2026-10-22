@@ -659,11 +659,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.82.0"
-      resolved-ref: c2b3fbce157d0a7c80a227eb9866801638044b43
+      ref: "v0.82.3"
+      resolved-ref: "73beede07fd12566c3fdc6f9ba1f284ae07cb08c"
       url: "https://github.com/zka32101/ukalab_core.git"
     source: git
-    version: "0.82.0"
+    version: "0.82.3"
   url_launcher:
     dependency: "direct main"
     description:
