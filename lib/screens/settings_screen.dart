@@ -47,6 +47,7 @@ class SettingsScreen extends ConsumerWidget {
     PremiumFeature.historyExport,
     PremiumFeature.mockExamHistory,
     PremiumFeature.readingReadAloud,
+    PremiumFeature.qualificationCharacter,
   ];
 
   /// 間違いノートの「解き直す」で演習画面を開くために使う。省略時は間違いノートの入口を出さない。

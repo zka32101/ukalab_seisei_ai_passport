@@ -94,6 +94,7 @@ void main() {
       expect(find.text('プレミアムでできること'), findsOneWidget);
       expect(find.byKey(const ValueKey('premiumBenefit_weakDrill')), findsOneWidget);
       expect(find.byKey(const ValueKey('premiumBenefit_readingReadAloud')), findsOneWidget);
+      expect(find.byKey(const ValueKey('premiumBenefit_qualificationCharacter')), findsOneWidget);
       // このアプリに無いカスタム模擬試験は載せない。
       expect(find.byKey(const ValueKey('premiumBenefit_customMockExam')), findsNothing);
       final card = find.byType(PremiumBenefitsCard);
