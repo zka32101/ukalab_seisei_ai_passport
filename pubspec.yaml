@@ -1,7 +1,7 @@
 name: ukalab_seisei_ai_passport
 description: "うかラボ 生成AIパスポート。生成AIパスポート試験（GUGA）の学習アプリ。追加モジュール: 生成AI導入実務者検定（GAIP）。"
 publish_to: 'none'
-version: 1.0.3+5
+version: 1.0.4+6
 
 environment:
   sdk: ^3.9.0
