@@ -1,5 +1,5 @@
-import 'package:app_common_kit/app_common_kit.dart' show StartupSplash;
 import 'package:flutter/material.dart';
+import 'package:ukalab_core/ui.dart' show UkalabStartupSplash;
 
 /// アプリアイコン（アダプティブ背景）の紫。Android の起動画面
 /// （res/values/colors.xml の launch_background）と同じ色にして、
@@ -14,9 +14,9 @@ class LaunchSplash extends StatelessWidget {
   const LaunchSplash({super.key});
 
   @override
-  Widget build(BuildContext context) => const StartupSplash(
-        appIconAsset: kLaunchIconAsset,
+  Widget build(BuildContext context) => const UkalabStartupSplash(
+        iconAsset: kLaunchIconAsset,
         backgroundColor: kLaunchBackgroundColor,
-        appIconSize: 160,
+        iconSize: 160,
       );
 }

@@ -20,7 +20,7 @@ void main() {
   testWidgets('バージョンは固定文字でなく、実際の版を表示する', (tester) async {
     PackageInfo.setMockInitialValues(
       appName: 'test',
-      packageName: 'com.example.test',
+      packageName: 'com.yourwish.ukalab.seisei_ai_passport',
       version: '9.8.7',
       buildNumber: '42',
       buildSignature: '',
@@ -49,7 +49,7 @@ void main() {
 
   testWidgets('設定「このアプリについて」に非公式・商標の表示があり、320dp/文字2.0倍でも溢れない', (tester) async {
     PackageInfo.setMockInitialValues(
-      appName: 'test', packageName: 'com.example.test', version: '1.0.0', buildNumber: '1', buildSignature: '');
+      appName: 'test', packageName: 'com.yourwish.ukalab.seisei_ai_passport', version: '1.0.0', buildNumber: '1', buildSignature: '');
     tester.view.physicalSize = const Size(320, 640);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
