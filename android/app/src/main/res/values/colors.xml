@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- アダプティブアイコン背景の紫。アプリ内 StartupSplash（lib/launch_splash.dart）と同じ色。 -->
+    <!-- アダプティブアイコン背景の紫。アプリ内 UkalabStartupSplash（lib/launch_splash.dart）と同じ色。 -->
     <color name="launch_background">#9948C8</color>
 </resources>

@@ -168,7 +168,7 @@ void main() {
   testWidgets('設定: 考える間・次までの間・自動で次へ・解説を読むを保存し、反映する', (tester) async {
     PackageInfo.setMockInitialValues(
       appName: 't',
-      packageName: 'com.example.t',
+      packageName: 'com.yourwish.ukalab.seisei_ai_passport',
       version: '1.0.0',
       buildNumber: '1',
       buildSignature: '',
