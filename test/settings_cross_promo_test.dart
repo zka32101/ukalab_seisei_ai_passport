@@ -18,7 +18,7 @@ void main() {
   });
 
   const appId = 'com.yourwish.ukalab.seisei_ai_passport';
-  const sampleJson = '[{"id":"com.example.ukalab.other","name":"うかラボ サンプル","tagline":"テスト用",'
+  const sampleJson = '[{"id":"com.yourwish.ukalab.other","name":"うかラボ サンプル","tagline":"テスト用",'
       '"iconUrl":"","storeUrl":"https://example.com","category":"うかラボ"},'
       '{"id":"$appId","name":"自アプリ","tagline":"","iconUrl":"","storeUrl":"https://example.com","category":"うかラボ"}]';
 
