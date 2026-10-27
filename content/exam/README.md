@@ -339,3 +339,9 @@ dart run ukalab_core:validate_content content/exam/seisei_ai_passport.json --ter
 - 件数は 548問 → 628問（1章94→134／5章87→127）。既存の問題は変更していない。
 - 数値・法令条文・統計・日付・実在の企業名・人物名は使わず、概念・考え方の問題とした。確認用の一覧は `docs/expert_review/ch5_ch1_additions_checklist.csv`。専門確認が済むまで本番確定版として扱わない。
 
+## 2026-10-27 状況判断型の問題を20問追加
+
+- sap-0629〜0648 の20問（2章4／4章12／5章4・全て4択）を追加。短い状況文に対する判断を問う形式で、解説の後半に別場面の補足を入れた。
+- 全て `source: original`・`tags: ["ai-draft"]`・専門家未確認。新問題形式（`type`）は使っていないため `kNewQuestionTypesEnabled` は変更していない（false のまま）。
+- 件数は 628問 → 648問（2章125→129／4章144→156／5章127→131）。既存の問題は変更していない。
+- 専門家確認用のチェックリストは `docs/expert_review/situational_20_checklist.csv`。
