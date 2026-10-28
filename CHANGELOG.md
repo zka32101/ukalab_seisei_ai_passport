@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### 変更
+- 専門家確認済み（2026-10）の AI 下書き問題 190問（`questions.jsonl`）から `ai-draft` タグを外し、`sourceRef` を「…AI下書き・専門家確認済み」に更新、`contentVer` を 2026.10.28 に更新（問題文・選択肢・正誤・解説は変更なし）。読み物（`reading.jsonl`）の `sourceRef` の `ai-draft` 印は対象外のため据え置き
 - ukalab_core を v0.86.0 に更新。起動画面を core の `UkalabStartupSplash` に置き換えた（背景色・アイコンは従来どおり）。テストのパッケージ名を `com.example.*` から正規のIDに直した
 - ukalab_core を v0.82.2 に更新（資格専用キャラの画像が表示される）
 - app_common_kit を v4.0.0、ukalab_core を v0.82.0 に更新。学習向けの部品（`QuestionCard` など）が core の `learning.dart` に移ったため、import を追加した（見た目・挙動は変わらない）

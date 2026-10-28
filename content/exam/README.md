@@ -352,3 +352,9 @@ dart run ukalab_core:validate_content content/exam/seisei_ai_passport.json --ter
 - 全て `source: original`・`tags: ["ai-draft"]`・専門家未確認。`contentVer` は 2026.10.28。新問題形式（`type`）は使っていないため `kNewQuestionTypesEnabled` は変更していない（false のまま）。
 - 件数は 648問 → 668問（2章129→132／4章156→166／5章131→138）。既存の問題は変更していない。
 - 専門家確認用のチェックリストは `docs/expert_review/situational_20_vol2_checklist.csv`。法令・サービス仕様・数値・特定のサービス名には踏み込んでいない。専門確認が済むまで本番確定版として扱わない。
+
+
+### 専門家確認済み（2026-10-28）
+
+- `questions.jsonl` の `tags: ["ai-draft"]` が付いていた 190問（sap-0479〜0668）は専門家確認OKとなり、`ai-draft` タグを外した。`sourceRef` は「AI下書き・専門家確認済み」を含む表記に更新し、`contentVer` は 2026.10.28。問題文・選択肢・正誤・解説は変更していない。
+- 上記の記述中の「`tags: ["ai-draft"]`・専門家未確認」は追加時点の記録である。`reading.jsonl` の `sourceRef` の `ai-draft` 印は未対応。
