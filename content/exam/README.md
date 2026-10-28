@@ -345,3 +345,10 @@ dart run ukalab_core:validate_content content/exam/seisei_ai_passport.json --ter
 - 全て `source: original`・`tags: ["ai-draft"]`・専門家未確認。新問題形式（`type`）は使っていないため `kNewQuestionTypesEnabled` は変更していない（false のまま）。
 - 件数は 628問 → 648問（2章125→129／4章144→156／5章127→131）。既存の問題は変更していない。
 - 専門家確認用のチェックリストは `docs/expert_review/situational_20_checklist.csv`。
+
+## 2026-10-28 状況判断型の問題を20問追加（第2弾）
+
+- sap-0649〜0668 の20問（2章3／4章10／5章7・全て4択）を追加。第1弾（sap-0629〜0648）と同じ形式で、解説の後半に「別の場面：」の補足を入れた。第1弾と重複しない場面にし、プロンプトの工夫と出力の検証、ハルシネーションの確認手順、個人情報を含む入力の可否、著作権・生成物の利用判断、社内ルール作り、業務導入の判断（向く業務・向かない業務）、偏り・差別的出力への対応に分散させた。
+- 全て `source: original`・`tags: ["ai-draft"]`・専門家未確認。`contentVer` は 2026.10.28。新問題形式（`type`）は使っていないため `kNewQuestionTypesEnabled` は変更していない（false のまま）。
+- 件数は 648問 → 668問（2章129→132／4章156→166／5章131→138）。既存の問題は変更していない。
+- 専門家確認用のチェックリストは `docs/expert_review/situational_20_vol2_checklist.csv`。法令・サービス仕様・数値・特定のサービス名には踏み込んでいない。専門確認が済むまで本番確定版として扱わない。
