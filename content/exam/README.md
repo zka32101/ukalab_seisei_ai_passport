@@ -357,4 +357,9 @@ dart run ukalab_core:validate_content content/exam/seisei_ai_passport.json --ter
 ### 専門家確認済み（2026-10-28）
 
 - `questions.jsonl` の `tags: ["ai-draft"]` が付いていた 190問（sap-0479〜0668）は専門家確認OKとなり、`ai-draft` タグを外した。`sourceRef` は「AI下書き・専門家確認済み」を含む表記に更新し、`contentVer` は 2026.10.28。問題文・選択肢・正誤・解説は変更していない。
-- 上記の記述中の「`tags: ["ai-draft"]`・専門家未確認」は追加時点の記録である。`reading.jsonl` の `sourceRef` の `ai-draft` 印は未対応。
+- 上記の記述中の「`tags: ["ai-draft"]`・専門家未確認」は追加時点の記録である。`reading.jsonl` の `sourceRef` の `ai-draft` 印は、下の「読み物（2026-10-28）」のとおり別途対応した。
+
+### 読み物（2026-10-28）
+
+- `reading.jsonl` の 8本（reading-ch1-01 / ch1-03 / ch2-01 / ch2-03 / ch3-02 / ch3-05 / ch4-02 / ch5-01）は、体験コンテンツのため専門家確認は不要と運営が判断した。専門家確認は行っていない。
+- `sourceRef` を「自作（AI下書き由来。体験コンテンツのため専門家確認は不要と判断。既存資料の転載・言い換えなし）」に更新し、`ai-draft` の印は外した。「専門家確認済み」とは書かない。本文・`contentVer` は変更なし。
