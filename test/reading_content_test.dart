@@ -59,11 +59,15 @@ void main() {
     }
   });
 
-  test('拡充分は ai-draft の印があり、4〜6節で、各章に属する', () {
+  test('拡充分は AI下書き由来が sourceRef で追跡でき、4〜6節で、各章に属する', () {
     final expanded = readings.where((r) => _expandedId.hasMatch(r.readingId)).toList();
     expect(expanded.length, greaterThanOrEqualTo(8), reason: '第1弾は8章以上');
     for (final r in expanded) {
-      expect(r.sourceRef, contains('ai-draft'), reason: r.readingId);
+      expect(r.sourceRef, contains('AI下書き由来'), reason: r.readingId);
+      expect(r.sourceRef, contains('専門家確認は不要と判断'), reason: r.readingId);
+      expect(r.sourceRef, isNot(contains('ai-draft')), reason: '${r.readingId}: 旧印は外した');
+      expect(r.sourceRef, isNot(contains('専門家確認済み')),
+          reason: '${r.readingId}: 確認はしていないので「確認済み」と書かない');
       expect(r.sections.length, inInclusiveRange(4, 6), reason: r.readingId);
       expect(r.readingId, startsWith('reading-${r.subjectId}-'), reason: r.readingId);
       expect(r.relatedTermIds, isNotEmpty, reason: r.readingId);
