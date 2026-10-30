@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### 変更
+- ukalab_core を v0.87.0 に更新（読み物の表現拡張・表の列幅/数字の折り返し・`reading.dart` 入口を追加。後方互換で、このアプリでは新機能は未使用）
 - 読み物 8本（`reading.jsonl`）の `sourceRef` から `ai-draft` の印を外し、「自作（AI下書き由来。体験コンテンツのため専門家確認は不要と判断。…）」に更新（2026-10-28。体験コンテンツなので専門家確認は不要という運営判断。専門家確認済みとは書いていない）。`test/reading_content_test.dart` は新表記（AI下書き由来・確認不要の判断が残ること、旧印と「専門家確認済み」を含まないこと）を検査する形に更新。本文・`contentVer` は変更なし
 - 専門家確認済み（2026-10）の AI 下書き問題 190問（`questions.jsonl`）から `ai-draft` タグを外し、`sourceRef` を「…AI下書き・専門家確認済み」に更新、`contentVer` を 2026.10.28 に更新（問題文・選択肢・正誤・解説は変更なし）。読み物（`reading.jsonl`）の `sourceRef` の `ai-draft` 印は対象外のため据え置き
 - ukalab_core を v0.86.0 に更新。起動画面を core の `UkalabStartupSplash` に置き換えた（背景色・アイコンは従来どおり）。テストのパッケージ名を `com.example.*` から正規のIDに直した
