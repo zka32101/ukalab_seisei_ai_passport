@@ -1,3 +1,4 @@
+import '../feedback/feedback_tile.dart';
 import 'package:app_common_kit/app_common_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -162,6 +163,7 @@ class SettingsScreen extends ConsumerWidget {
           description: '解答履歴・間隔反復の記録・自分用メモ・当日チェックリストは、試験日・ブックマークを除いて、'
               '書き出し・読み込み・リセットができます。',
         ),
+        const FeedbackTile(),
         const Divider(height: 32),
         ListTile(
           leading: const Icon(Icons.emoji_events_outlined),
